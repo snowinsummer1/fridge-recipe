@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>냉장고 레시피</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <h1>냉장고 레시피</h1>
+    <p class="sub">가지고 있는 재료를 입력하면, <strong>가장 적게 더 사서</strong> 만들 수 있는 요리부터 보여드려요.</p>
+
+    <div class="search">
+      <div class="chips" id="chips" aria-live="polite"></div>
+      <div class="inputrow">
+        <input id="q" type="text" autocomplete="off" placeholder="재료 입력 (예: 두부, 달걀, 김치)" aria-label="재료 입력" aria-autocomplete="list" aria-controls="sugg">
+        <ul id="sugg" class="sugg" role="listbox" hidden></ul>
+      </div>
+      <p class="hint" id="hint" role="status"></p>
+    </div>
+
+    <div class="quick" id="quick" aria-label="자주 쓰는 재료"></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="options" aria-label="옵션">
+    <label class="opt"><input type="checkbox" id="optCommon"> 마늘·대파·양파·고춧가루 같은 <b>흔한 양념도 집에 있다</b>고 치기</label>
+    <label class="opt">추가 재료
+      <select id="optMissing">
+        <option value="0">0개 (지금 바로)</option>
+        <option value="1">1개 이하</option>
+        <option value="2">2개 이하</option>
+        <option value="3">3개 이하</option>
+        <option value="5">5개 이하</option>
+        <option value="99" selected>제한 없음</option>
+      </select>
+    </label>
+    <label class="opt">종류
+      <select id="optCat"><option value="">전체</option></select>
+    </label>
+  </section>
+
+  <p class="summary" id="summary"></p>
+  <div class="grid" id="grid"></div>
+  <div class="more"><button id="more" hidden>더 보기</button></div>
+</main>
+
+<footer class="wrap foot">
+  <p>레시피 데이터: 식품의약품안전처 「조리식품의 레시피 DB」(공공데이터). 재료 매칭은 자동 정리된 결과라 일부 부정확할 수 있어요.</p>
+</footer>
+
+<dialog id="dlg">
+  <article id="dlgBody"></article>
+</dialog>
+
+<script src="app.js"></script>
+</body>
+</html>
