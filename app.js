@@ -71,9 +71,9 @@ function match() {
   const out = [];
   for (const r of state.recipes) {
     if (cat && r.category !== cat) continue;
+    if (!state.mine.every((m) => r.ingredients.includes(m))) continue;   // 입력한 재료는 모두 들어가야 한다
     const need = r.ingredients.filter((i) => !assumed.has(i));
     const have = need.filter((i) => mine.has(i));
-    if (!have.length) continue;                      // 내 재료를 하나도 안 쓰는 요리는 제외
     const missing = need.filter((i) => !mine.has(i));
     if (missing.length > maxMissing) continue;
     out.push({ r, have, missing, staples: r.ingredients.filter((i) => assumed.has(i)) });
@@ -105,8 +105,8 @@ function update(resetPage = true) {
   state.results = match();
   const n = state.results.length;
   $("summary").textContent = n
-    ? `${n}개의 요리를 찾았어요. 추가로 필요한 재료가 적은 순서예요.`
-    : "조건에 맞는 요리가 없어요. ‘추가 재료’ 제한을 늘려 보세요.";
+    ? `입력한 재료를 모두 쓰는 요리 ${n}개를 찾았어요. 추가로 필요한 재료가 적은 순서예요.`
+    : "입력한 재료를 모두 쓰는 요리가 없어요. 재료를 하나 줄이거나 ‘추가 재료’ 제한을 늘려 보세요.";
   for (const m of state.results.slice(0, state.shown)) grid.append(card(m));
   $("more").hidden = state.shown >= n;
 }
