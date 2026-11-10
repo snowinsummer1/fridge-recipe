@@ -111,16 +111,20 @@ function update(resetPage = true) {
   $("more").hidden = state.shown >= n;
 }
 
+function metaText(r) {
+  return [r.category, r.method, r.minutes ? `${r.minutes}분` : null].filter(Boolean).join(" · ");
+}
+
 function card({ r, have, missing, staples }) {
   const badge = missing.length
     ? h("span", { class: "badge" }, `추가 ${missing.length}개`)
     : h("span", { class: "badge zero" }, "바로 가능");
   const img = r.img ? h("img", { src: r.img, alt: "", loading: "lazy", onerror: (e) => e.target.remove() }) : null;
   return h("button", { class: "card", onclick: () => openDetail(r, { have, missing, staples }) },
-    h("div", { class: "thumb" }, img, badge),
+    h("div", { class: "thumb" }, img || h("div", { class: "ph" }, "사진 준비중"), badge),
     h("div", { class: "cbody" },
       h("h3", {}, r.name),
-      h("div", { class: "meta" }, [r.category, r.method].filter(Boolean).join(" · ")),
+      h("div", { class: "meta" }, metaText(r)),
       h("div", { class: "tags" },
         missing.map((i) => h("span", { class: "tag miss" }, `+ ${i}`)),
         have.map((i) => h("span", { class: "tag have" }, i)))));
@@ -154,7 +158,8 @@ function openDetail(r, m) {
       r.img ? h("img", { src: r.img, alt: r.name }) : null),
     h("div", { class: "dbody" },
       h("h2", {}, r.name),
-      h("div", { class: "meta" }, [r.category, r.method].filter(Boolean).join(" · ")),
+      h("div", { class: "meta" }, metaText(r)),
+      r.source === "custom" ? h("p", { class: "aitag" }, "직접 작성한 간단 레시피예요. 간과 불 세기는 취향에 맞게 조절하세요.") : null,
       h("div", { class: "tags" },
         m.missing.map((i) => h("span", { class: "tag miss" }, `+ ${i}`)),
         m.have.map((i) => h("span", { class: "tag have" }, i)),
