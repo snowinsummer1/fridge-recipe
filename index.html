@@ -22,6 +22,17 @@
     </div>
 
     <div class="quick" id="quick" aria-label="자주 쓰는 재료"></div>
+
+    <div class="ai-camera-container">
+      <h3>📷 냉장고 사진으로 재료 자동 인식</h3>
+      <input type="file" id="camera-input" accept="image/*" capture="environment" style="display: none;" />
+      <button type="button" id="btn-trigger-camera" class="btn-primary">사진 촬영 / 업로드</button>
+      
+      <div id="ai-status" class="ai-status-text"></div>
+      <div id="image-preview-box" class="preview-box" style="display: none;">
+        <img id="image-preview" alt="냉장고 사진 미리보기" />
+      </div>
+    </div>
   </div>
 </header>
 
@@ -48,14 +59,24 @@
   <div class="more"><button id="more" hidden>더 보기</button></div>
 </main>
 
+
 <footer class="wrap foot">
   <p>레시피 데이터: 식품의약품안전처 「조리식품의 레시피 DB」(공공데이터). 재료 매칭은 자동 정리된 결과라 일부 부정확할 수 있어요.</p>
+  <div id="apiKeySection" style="margin-top: 20px; padding: 10px; border: 1px solid #ccc; background: #f9f9f9;">
+    <label for="apiKeyInput">Gemini API Key: </label>
+    <input type="password" id="apiKeyInput" placeholder="API 키를 입력하세요" style="width: 250px;">
+    <button id="saveKeyBtn">저장</button>
+    <span id="keyStatus" style="margin-left: 10px; font-size: 0.9em;"></span>
+  </div>
 </footer>
 
 <dialog id="dlg">
   <article id="dlgBody"></article>
 </dialog>
 
+<script src="config.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
+
+

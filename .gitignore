@@ -1,0 +1,18 @@
+# API 키 및 설정 파일 (보안 필수)
+config.js
+config.*.js
+!.config.example.js
+.env
+.env.local
+
+# OS 생성 임시 파일
+.DS_Store
+Thumbs.db
+
+# 에디터 / IDE 설정 파일
+.vscode/
+.idea/
+
+# 라이브러리 및 로그 (Node.js/npm 사용 시)
+node_modules/
+*.log

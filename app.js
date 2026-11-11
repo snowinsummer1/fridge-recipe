@@ -248,3 +248,255 @@ for (const id of ["optCommon", "optMissing", "optCat"]) $(id).addEventListener("
 $("more").addEventListener("click", () => { state.shown += PAGE; update(false); });
 $("dlg").addEventListener("click", (e) => { if (e.target === $("dlg")) $("dlg").close(); });
 load();
+
+
+/* ---------- 냉장고 인식 ---------- */
+
+const cameraInput = document.getElementById('camera-input');
+const btnTriggerCamera = document.getElementById('btn-trigger-camera');
+const aiStatus = document.getElementById('ai-status');
+const imagePreview = document.getElementById('image-preview');
+const imagePreviewBox = document.getElementById('image-preview-box');
+
+btnTriggerCamera.addEventListener('click', () => cameraInput.click());
+
+cameraInput.addEventListener('change', async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const rawConfigKey = window.CONFIG?.GEMINI_API_KEY;
+  const configKey = (rawConfigKey && !rawConfigKey.includes('여기에_')) ? rawConfigKey : null;
+
+  // sessionStorage 키 우선 -> 없으면 configKey 사용
+  const apiKey = sessionStorage.getItem('gemini_api_key') || configKey;
+
+  if (!apiKey) {
+    alert('Gemini API 키가 설정되지 않았습니다. 하단에서 키를 입력하고 저장해 주세요.');
+    return;
+  }
+
+  try {
+    // 1. 이미지 압축 (속도 및 전송량 최적화)
+    const resizedBase64 = await resizeAndCompressImage(file, 1024, 1024);
+    imagePreview.src = `data:image/jpeg;base64,${resizedBase64}`;
+    imagePreviewBox.style.display = 'block';
+
+    // 2. AI 분석 진행
+    aiStatus.textContent = '🔍 냉장고 속 재료를 분석하는 중입니다...';
+    btnTriggerCamera.disabled = true;
+
+    const detectedNames = await callGeminiVisionAPI(resizedBase64, apiKey);
+    aiStatus.textContent = `✨ 인식 완료: [ ${detectedNames.join(', ')} ]`;
+
+    // 3. 인식된 재료 체크박스 자동 선택
+    matchAndSelectIngredients(detectedNames);
+  } catch (error) {
+    console.error('AI 인식 에러:', error);
+    aiStatus.textContent = `❌ 인식 실패: ${error.message}`;
+  } finally {
+    btnTriggerCamera.disabled = false;
+  }
+});
+
+/* 이미지 압축 / Base64 변환 */
+function resizeAndCompressImage(file, maxWidth, maxHeight) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        let width = img.width;
+        let height = img.height;
+
+        if (width > height) {
+          if (width > maxWidth) {
+            height = Math.round((height * maxWidth) / width);
+            width = maxWidth;
+          }
+        } else {
+          if (height > maxHeight) {
+            width = Math.round((width * maxHeight) / height);
+            height = maxHeight;
+          }
+        }
+
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
+        resolve(dataUrl.split(',')[1]);
+      };
+      img.onerror = reject;
+      img.src = e.target.result;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+/* Gemini Vision API 호출 (최신 모델 적용 및 자동 폴백) */
+async function callGeminiVisionAPI(base64Image, apiKey) {
+  // 현재 계정에서 사용 가능한 최신 모델 순서로 설정
+  const candidateModels = [
+    'gemini-3.5-flash-lite',
+    'gemini-3.8-flash',
+    'gemini-3.5-flash',
+    'gemini-3.1-flash-lite'
+  ];
+
+  const promptText = `
+  이 냉장고 또는 식재료 사진을 분석하여 식별 가능한 식재료 이름만 추출해줘.
+  반드시 한국어 단어로 이루어진 JSON 배열 형태만 응답해줘.
+  예시: ["계란", "양파", "대파", "두부", "돼지고기"]
+  `;
+
+  let lastError = null;
+
+  for (const model of candidateModels) {
+    try {
+      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+
+      const payload = {
+        contents: [
+          {
+            parts: [
+              { inline_data: { mime_type: 'image/jpeg', data: base64Image } },
+              { text: promptText }
+            ]
+          }
+        ],
+        generationConfig: {
+          response_mime_type: 'application/json'
+        }
+      };
+
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error?.message || `상태코드 ${response.status}`);
+      }
+
+      const data = await response.json();
+      const parts = data.candidates?.[0]?.content?.parts || [];
+      const textPart = parts.find(p => !p.thought) || parts[parts.length - 1];
+
+      if (!textPart || !textPart.text) {
+        throw new Error('응답 데이터 텍스트 부재');
+      }
+
+      const cleanText = textPart.text.replace(/```json/gi, '').replace(/```/g, '').trim();
+      const detectedNames = JSON.parse(cleanText);
+      autoInputIngredients(detectedNames);
+      return detectedNames;
+
+    } catch (err) {
+      console.warn(`[${model}] 실패, 다음 모델 시도:`, err.message);
+      lastError = err;
+    }
+  }
+
+  throw lastError || new Error('모든 Gemini 모델 호출에 실패했습니다.');
+}
+
+/* 기존 재료 체크박스 자동 매칭 및 이벤트 발생 */
+function matchAndSelectIngredients(detectedNames) {
+  detectedNames.forEach((name) => {
+    const cleanName = name.trim();
+
+    let targetName = cleanName;
+    if (window.aliasesData && window.aliasesData[cleanName]) {
+      targetName = window.aliasesData[cleanName];
+    }
+
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach((cb) => {
+      const labelText = cb.parentElement ? cb.parentElement.textContent.trim() : '';
+      if (labelText.includes(cleanName) || labelText.includes(targetName) || cb.value === cleanName) {
+        if (!cb.checked) {
+          cb.checked = true;
+          cb.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+      }
+    });
+  });
+}
+
+function autoInputIngredients(detectedNames) {
+  if (!Array.isArray(detectedNames) || !detectedNames.length) return;
+
+  const added = [];
+  const skipped = [];
+
+  detectedNames.forEach((rawName) => {
+    const name = rawName.trim();
+    if (!name) return;
+
+    // 1. 표준 명칭 변환 (aliases.json 활용: 예 '계란' -> '달걀')
+    let canon = state.aliases[name] || name;
+
+    // 2. 수식어가 붙은 경우 부분 일치 매칭 시도 (예: '빨간 파프리카' -> '파프리카', '적양파' -> '양파')
+    if (!state.names.has(canon)) {
+      for (const ingName of state.names) {
+        if (name.includes(ingName) || ingName.includes(name)) {
+          canon = ingName;
+          break;
+        }
+      }
+    }
+
+    // 3. 레시피 DB(ingredients.json)에 존재하면 추가
+    if (state.names.has(canon)) {
+      if (!state.mine.includes(canon)) {
+        state.mine.push(canon);
+        added.push(canon);
+      }
+    } else {
+      skipped.push(name); // DB에 레시피 재료로 등록되지 않은 과일/재료 제외 (예: 참외, 석류 등)
+    }
+  });
+
+  // 4. 기존 app.js의 update()를 1회만 호출하여 칩 생성, 레시피 검색, localStorage 저장을 한 번에 처리
+  if (added.length > 0) {
+    update();
+  }
+
+  // 5. 결과 상태 표시
+  let statusMsg = `✨ ${added.length}개 재료가 자동으로 입력되었습니다: [ ${added.join(', ')} ]`;
+  if (skipped.length > 0) {
+    statusMsg += `\n(⚠️ 레시피 데이터에 없는 재료 제외: ${skipped.join(', ')})`;
+  }
+  
+  if (aiStatus) {
+    aiStatus.innerText = statusMsg;
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const savedKey = sessionStorage.getItem('gemini_api_key');
+  if (savedKey) {
+      document.getElementById('apiKeyInput').value = savedKey;
+      updateKeyStatus(true);
+  }
+});
+
+document.getElementById('saveKeyBtn').addEventListener('click', () => {
+  const key = document.getElementById('apiKeyInput').value.trim();
+  if (!key) return alert('API 키를 입력하세요!');
+  sessionStorage.setItem('gemini_api_key', key);
+  updateKeyStatus(true);
+  alert('저장되었습니다.');
+});
+
+function updateKeyStatus(isSet) {
+  const statusSpan = document.getElementById('keyStatus');
+  statusSpan.innerText = isSet ? '🟢 API 키 설정됨' : '🔴 API 키 미설정';
+  statusSpan.style.color = isSet ? 'green' : 'red';
+}
