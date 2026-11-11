@@ -49,6 +49,7 @@ async function load() {
   const opts = store("opts") || {};
   $("optCommon").checked = !!opts.common;
   if (opts.mode) $("optMode").value = opts.mode;
+  if (opts.sort) $("optSort").value = opts.sort;
   if (opts.missing) $("optMissing").value = opts.missing;
   if (opts.cat) $("optCat").value = opts.cat;
 
@@ -81,11 +82,16 @@ function match() {
     if (missing.length > maxMissing) continue;
     out.push({ r, have, missing, staples: r.ingredients.filter((i) => assumed.has(i)) });
   }
-  // 부족한 재료가 적은 순 → 내 재료를 많이 쓰는 순 → 필요한 재료가 적은 순
-  out.sort((a, b) =>
-    a.missing.length - b.missing.length ||
-    b.have.length - a.have.length ||
-    (a.have.length + a.missing.length) - (b.have.length + b.missing.length));
+  const total = (m) => m.have.length + m.missing.length;
+  if (!all && $("optSort").value === "have") {
+    // 내 재료를 많이 쓰는 순 → 부족한 재료가 적은 순 → 필요한 재료가 적은 순
+    out.sort((a, b) =>
+      b.have.length - a.have.length || a.missing.length - b.missing.length || total(a) - total(b));
+  } else {
+    // 부족한 재료가 적은 순 → 내 재료를 많이 쓰는 순 → 필요한 재료가 적은 순
+    out.sort((a, b) =>
+      a.missing.length - b.missing.length || b.have.length - a.have.length || total(a) - total(b));
+  }
   return out;
 }
 
@@ -93,7 +99,8 @@ function match() {
 function update(resetPage = true) {
   if (resetPage) state.shown = PAGE;
   store("mine", state.mine);
-  store("opts", { common: $("optCommon").checked, mode: $("optMode").value, missing: $("optMissing").value, cat: $("optCat").value });
+  store("opts", { common: $("optCommon").checked, mode: $("optMode").value, sort: $("optSort").value, missing: $("optMissing").value, cat: $("optCat").value });
+  $("sortOpt").hidden = $("optMode").value !== "any";   // 정렬 선택은 '하나라도 포함'일 때만
   renderChips();
   renderQuick();
 
@@ -108,8 +115,9 @@ function update(resetPage = true) {
   state.results = match();
   const n = state.results.length;
   const all = $("optMode").value === "all";
+  const order = !all && $("optSort").value === "have" ? "내 재료를 많이 쓰는" : "추가로 필요한 재료가 적은";
   $("summary").textContent = n
-    ? `${all ? "입력한 재료를 모두 쓰는 요리" : "요리"} ${n}개를 찾았어요. 추가로 필요한 재료가 적은 순서예요.`
+    ? `${all ? "입력한 재료를 모두 쓰는 요리" : "요리"} ${n}개를 찾았어요. ${order} 순서예요.`
     : all
       ? "입력한 재료를 모두 쓰는 요리가 없어요. 재료를 하나 줄이거나, ‘하나라도 포함’으로 바꾸거나, ‘추가 재료’ 제한을 늘려 보세요."
       : "조건에 맞는 요리가 없어요. ‘추가 재료’ 제한을 늘려 보세요.";
@@ -139,7 +147,8 @@ function card({ r, have, missing, staples }) {
 function renderChips() {
   $("chips").replaceChildren(...state.mine.map((n) =>
     h("span", { class: "chip" }, n,
-      h("button", { type: "button", "aria-label": `${n} 삭제`, onclick: () => removeIng(n) }, "×"))));
+      h("button", { type: "button", "aria-label": `${n} 삭제`, onclick: () => removeIng(n) }, "×"))),
+    state.mine.length ? h("button", { type: "button", class: "clearall", onclick: clearIngs }, "전체 삭제") : null);
 }
 
 function renderQuick() {
@@ -196,6 +205,7 @@ function addIng(name) {
   return true;
 }
 function removeIng(name) { state.mine = state.mine.filter((n) => n !== name); update(); }
+function clearIngs() { state.mine = []; update(); $("q").focus(); }
 
 let suggestions = [], cursor = -1;
 
@@ -250,7 +260,7 @@ function initInput() {
 
 /* ---------- 시작 ---------- */
 initInput();
-for (const id of ["optCommon", "optMode", "optMissing", "optCat"]) $(id).addEventListener("change", () => update());
+for (const id of ["optCommon", "optMode", "optSort", "optMissing", "optCat"]) $(id).addEventListener("change", () => update());
 $("more").addEventListener("click", () => { state.shown += PAGE; update(false); });
 $("dlg").addEventListener("click", (e) => { if (e.target === $("dlg")) $("dlg").close(); });
 load();

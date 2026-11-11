@@ -74,6 +74,12 @@ h1 { margin: 0 0 4px; font-size: 1.7rem; letter-spacing: -.02em; }
 
 .options { display: flex; flex-wrap: wrap; gap: 8px 22px; align-items: center; padding: 16px 0 6px; font-size: .92rem; }
 .opt { display: inline-flex; align-items: center; gap: 6px; }
+.opt[hidden] { display: none; }
+.clearall {
+  border: 1px solid var(--line); background: none; color: var(--muted); border-radius: 999px;
+  padding: 4px 12px; font: inherit; font-size: .85rem; cursor: pointer;
+}
+.clearall:hover { border-color: var(--accent); color: var(--accent); }
 select {
   font: inherit; padding: 5px 8px; border-radius: 8px; border: 1px solid var(--line);
   background: var(--surface); color: var(--text);
