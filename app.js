@@ -55,6 +55,35 @@ async function load() {
 
   renderQuick();
   update();
+  renderRec(false);
+}
+
+/* ---------- 메인 화면: 오늘의 추천 ---------- */
+function seededRandom(seed) {                      // mulberry32
+  return () => {
+    seed = (seed + 0x6D2B79F5) | 0;
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+// 기본은 날짜가 시드라 하루 동안 같은 3개가 나오고, '다시 뽑기'는 완전한 무작위다. 사진 있는 레시피만 후보.
+function renderRec(reroll) {
+  const pool = state.recipes.filter((r) => r.img);
+  const d = new Date();
+  const rand = reroll ? Math.random : seededRandom(d.getFullYear() * 10000 + (d.getMonth() + 1) * 100 + d.getDate());
+  const picks = new Set();
+  while (picks.size < Math.min(3, pool.length)) picks.add(Math.floor(rand() * pool.length));
+  $("recGrid").replaceChildren(...[...picks].map((i) => card({ r: pool[i], have: [], missing: [], staples: [] }, true)));
+}
+
+/* ---------- 화면 전환 (메인 ↔ 요리하러 가기) ---------- */
+function route() {
+  const inApp = location.hash === "#cook";
+  $("home").hidden = inApp;
+  $("app").hidden = !inApp;
+  window.scrollTo(0, 0);
 }
 
 /* ---------- 매칭 ---------- */
@@ -126,15 +155,17 @@ function update(resetPage = true) {
 }
 
 function metaText(r) {
-  return [r.category, r.method, r.minutes ? `${r.minutes}분` : null].filter(Boolean).join(" · ");
+  // API 레시피는 시간 정보가 없어 추정값(minutesEst)이라 '약'을 붙인다
+  return [r.category, r.method, r.minutes ? `${r.minutesEst ? "약 " : ""}${r.minutes}분` : null].filter(Boolean).join(" · ");
 }
 
-function card({ r, have, missing, staples }) {
-  const badge = missing.length
+// plain=true: 재료 매칭과 무관한 카드(오늘의 추천) — '추가 N개' 배지를 달지 않는다
+function card({ r, have, missing, staples }, plain = false) {
+  const badge = plain ? null : missing.length
     ? h("span", { class: "badge" }, `추가 ${missing.length}개`)
     : h("span", { class: "badge zero" }, "바로 가능");
   const img = r.img ? h("img", { src: r.img, alt: "", loading: "lazy", onerror: (e) => e.target.remove() }) : null;
-  return h("button", { class: "card", onclick: () => openDetail(r, { have, missing, staples }) },
+  return h("button", { class: "card", onclick: () => openDetail(r, { have, missing, staples, plain }) },
     h("div", { class: "thumb" }, img || h("div", { class: "ph" }, "사진 준비중"), badge),
     h("div", { class: "cbody" },
       h("h3", {}, r.name),
@@ -178,6 +209,7 @@ function openDetail(r, m) {
       h("div", { class: "meta" }, metaText(r)),
       r.source === "custom" ? h("p", { class: "aitag" }, "직접 작성한 간단 레시피예요. 간과 불 세기는 취향에 맞게 조절하세요.") : null,
       h("div", { class: "tags" },
+        m.plain ? r.ingredients.map((i) => h("span", { class: "tag staple" }, i)) : null,
         m.missing.map((i) => h("span", { class: "tag miss" }, `+ ${i}`)),
         m.have.map((i) => h("span", { class: "tag have" }, i)),
         m.staples.map((i) => h("span", { class: "tag staple" }, `${i} (기본)`))),
@@ -265,6 +297,9 @@ initInput();
 for (const id of ["optCommon", "optMode", "optSort", "optMissing", "optCat"]) $(id).addEventListener("change", () => update());
 $("more").addEventListener("click", () => { state.shown += PAGE; update(false); });
 $("dlg").addEventListener("click", (e) => { if (e.target === $("dlg")) $("dlg").close(); });
+$("reroll").addEventListener("click", () => renderRec(true));
+window.addEventListener("hashchange", route);
+route();
 load();
 
 

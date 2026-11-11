@@ -79,6 +79,20 @@ h1 { margin: 0 0 4px; font-size: 1.7rem; letter-spacing: -.02em; }
   border: 1px solid var(--line); background: none; color: var(--muted); border-radius: 999px;
   padding: 4px 12px; font: inherit; font-size: .85rem; cursor: pointer;
 }
+.home { padding: 56px 0 40px; }
+.home .logo { font-size: 2.4rem; text-align: center; margin-bottom: 8px; }
+.home .sub { text-align: center; margin-bottom: 28px; }
+.start {
+  display: block; width: fit-content; margin: 0 auto 48px; padding: 16px 44px; border-radius: 999px;
+  background: var(--accent); color: #fff; font-size: 1.25rem; font-weight: 700; text-decoration: none;
+  box-shadow: var(--shadow);
+}
+.start:hover, .start:focus-visible { filter: brightness(1.08); outline: none; transform: translateY(-1px); }
+.rechead { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.rechead h2 { margin: 0; font-size: 1.15rem; }
+.backhome { display: inline-block; margin-bottom: 10px; color: var(--muted); font-size: .9rem; text-decoration: none; }
+.backhome:hover { color: var(--accent); }
+#home[hidden], #app[hidden] { display: none; }
 .nochip { color: var(--muted); font-size: .92rem; padding: 4px 0; }
 .clearall:hover { border-color: var(--accent); color: var(--accent); }
 select {

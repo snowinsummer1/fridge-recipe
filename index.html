@@ -7,8 +7,24 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<section id="home" class="home">
+  <div class="wrap">
+    <h1 class="logo">냉장고 레시피</h1>
+    <p class="sub">가지고 있는 재료를 입력하면, <strong>가장 적게 더 사서</strong> 만들 수 있는 요리부터 보여드려요.</p>
+    <a class="start" id="start" href="#cook">요리하러 가기</a>
+
+    <div class="rechead">
+      <h2>오늘의 추천 레시피</h2>
+      <button type="button" id="reroll" class="clearall">다시 뽑기</button>
+    </div>
+    <div class="grid" id="recGrid" aria-live="polite"></div>
+  </div>
+</section>
+
+<div id="app" hidden>
 <header class="hero">
   <div class="wrap">
+    <a class="backhome" href="#">← 처음으로</a>
     <h1>냉장고 레시피</h1>
     <p class="sub">가지고 있는 재료를 입력하면, <strong>가장 적게 더 사서</strong> 만들 수 있는 요리부터 보여드려요.</p>
 
@@ -81,6 +97,7 @@
     <span id="keyStatus"></span>
   </div>
 </footer>
+</div>
 
 <dialog id="dlg">
   <article id="dlgBody"></article>
