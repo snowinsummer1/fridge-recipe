@@ -148,7 +148,9 @@ function renderChips() {
   $("chips").replaceChildren(...state.mine.map((n) =>
     h("span", { class: "chip" }, n,
       h("button", { type: "button", "aria-label": `${n} 삭제`, onclick: () => removeIng(n) }, "×"))),
-    state.mine.length ? h("button", { type: "button", class: "clearall", onclick: clearIngs }, "전체 삭제") : null);
+    state.mine.length
+      ? h("button", { type: "button", class: "clearall", onclick: clearIngs }, "전체 삭제")
+      : h("span", { class: "nochip" }, "재료 없음"));
 }
 
 function renderQuick() {

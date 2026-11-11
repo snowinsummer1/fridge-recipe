@@ -79,6 +79,7 @@ h1 { margin: 0 0 4px; font-size: 1.7rem; letter-spacing: -.02em; }
   border: 1px solid var(--line); background: none; color: var(--muted); border-radius: 999px;
   padding: 4px 12px; font: inherit; font-size: .85rem; cursor: pointer;
 }
+.nochip { color: var(--muted); font-size: .92rem; padding: 4px 0; }
 .clearall:hover { border-color: var(--accent); color: var(--accent); }
 select {
   font: inherit; padding: 5px 8px; border-radius: 8px; border: 1px solid var(--line);
