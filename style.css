@@ -142,13 +142,23 @@ dialog::backdrop { background: rgba(0, 0, 0, .55); }
 .nutri { display: flex; flex-wrap: wrap; gap: 6px 16px; color: var(--muted); font-size: .88rem; }
 
 .ai-camera-container {
-  background: #f8f9fa;
-  border: 2px dashed #0d6efd;
+  background: var(--bg);
+  border: 2px dashed var(--accent);
   border-radius: 12px;
   padding: 20px;
   margin: 16px 0;
   text-align: center;
 }
+.ai-camera-container h3 { margin: 0 0 10px; font-size: 1rem; }
+.btn-primary {
+  font: inherit; padding: 8px 20px; border-radius: 999px; border: 0; cursor: pointer;
+  background: var(--accent); color: #fff; font-weight: 600;
+}
+.btn-primary[disabled] { opacity: .5; cursor: default; }
+.apikey { margin-top: 20px; padding: 10px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+.apikey input { width: 250px; max-width: 100%; font: inherit; padding: 4px 8px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg); color: var(--text); }
+.apikey button { font: inherit; padding: 4px 12px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); color: var(--text); cursor: pointer; }
+.apikey span { margin-left: 10px; font-size: .9em; }
 
 .api-key-box input {
   width: 100%;
@@ -163,7 +173,8 @@ dialog::backdrop { background: rgba(0, 0, 0, .55); }
 .ai-status-text {
   margin-top: 12px;
   font-weight: 600;
-  color: #212529;
+  color: var(--text);
+  white-space: pre-line;
 }
 
 .preview-box img {

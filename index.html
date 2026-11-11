@@ -38,6 +38,12 @@
 
 <main class="wrap">
   <section class="options" aria-label="옵션">
+    <label class="opt">검색 방식
+      <select id="optMode">
+        <option value="all" selected>입력한 재료 모두 포함</option>
+        <option value="any">하나라도 포함 (기존)</option>
+      </select>
+    </label>
     <label class="opt"><input type="checkbox" id="optCommon"> 마늘·대파·양파·고춧가루 같은 <b>흔한 양념도 집에 있다</b>고 치기</label>
     <label class="opt">추가 재료
       <select id="optMissing">
@@ -62,11 +68,11 @@
 
 <footer class="wrap foot">
   <p>레시피 데이터: 식품의약품안전처 「조리식품의 레시피 DB」(공공데이터). 재료 매칭은 자동 정리된 결과라 일부 부정확할 수 있어요.</p>
-  <div id="apiKeySection" style="margin-top: 20px; padding: 10px; border: 1px solid #ccc; background: #f9f9f9;">
+  <div id="apiKeySection" class="apikey">
     <label for="apiKeyInput">Gemini API Key: </label>
-    <input type="password" id="apiKeyInput" placeholder="API 키를 입력하세요" style="width: 250px;">
+    <input type="password" id="apiKeyInput" placeholder="API 키를 입력하세요">
     <button id="saveKeyBtn">저장</button>
-    <span id="keyStatus" style="margin-left: 10px; font-size: 0.9em;"></span>
+    <span id="keyStatus"></span>
   </div>
 </footer>
 

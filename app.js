@@ -48,6 +48,7 @@ async function load() {
   if (Array.isArray(saved)) state.mine = saved.filter((n) => state.names.has(n));
   const opts = store("opts") || {};
   $("optCommon").checked = !!opts.common;
+  if (opts.mode) $("optMode").value = opts.mode;
   if (opts.missing) $("optMissing").value = opts.missing;
   if (opts.cat) $("optCat").value = opts.cat;
 
@@ -68,12 +69,14 @@ function match() {
   const mine = new Set(state.mine);
   const maxMissing = Number($("optMissing").value);
   const cat = $("optCat").value;
+  const all = $("optMode").value === "all";
   const out = [];
   for (const r of state.recipes) {
     if (cat && r.category !== cat) continue;
-    if (!state.mine.every((m) => r.ingredients.includes(m))) continue;   // 입력한 재료는 모두 들어가야 한다
+    if (all && !state.mine.every((m) => r.ingredients.includes(m))) continue;   // 입력한 재료는 모두 들어가야 한다
     const need = r.ingredients.filter((i) => !assumed.has(i));
     const have = need.filter((i) => mine.has(i));
+    if (!all && !have.length) continue;                   // 내 재료를 하나도 안 쓰는 요리는 제외
     const missing = need.filter((i) => !mine.has(i));
     if (missing.length > maxMissing) continue;
     out.push({ r, have, missing, staples: r.ingredients.filter((i) => assumed.has(i)) });
@@ -90,7 +93,7 @@ function match() {
 function update(resetPage = true) {
   if (resetPage) state.shown = PAGE;
   store("mine", state.mine);
-  store("opts", { common: $("optCommon").checked, missing: $("optMissing").value, cat: $("optCat").value });
+  store("opts", { common: $("optCommon").checked, mode: $("optMode").value, missing: $("optMissing").value, cat: $("optCat").value });
   renderChips();
   renderQuick();
 
@@ -104,9 +107,12 @@ function update(resetPage = true) {
   }
   state.results = match();
   const n = state.results.length;
+  const all = $("optMode").value === "all";
   $("summary").textContent = n
-    ? `입력한 재료를 모두 쓰는 요리 ${n}개를 찾았어요. 추가로 필요한 재료가 적은 순서예요.`
-    : "입력한 재료를 모두 쓰는 요리가 없어요. 재료를 하나 줄이거나 ‘추가 재료’ 제한을 늘려 보세요.";
+    ? `${all ? "입력한 재료를 모두 쓰는 요리" : "요리"} ${n}개를 찾았어요. 추가로 필요한 재료가 적은 순서예요.`
+    : all
+      ? "입력한 재료를 모두 쓰는 요리가 없어요. 재료를 하나 줄이거나, ‘하나라도 포함’으로 바꾸거나, ‘추가 재료’ 제한을 늘려 보세요."
+      : "조건에 맞는 요리가 없어요. ‘추가 재료’ 제한을 늘려 보세요.";
   for (const m of state.results.slice(0, state.shown)) grid.append(card(m));
   $("more").hidden = state.shown >= n;
 }
@@ -244,7 +250,7 @@ function initInput() {
 
 /* ---------- 시작 ---------- */
 initInput();
-for (const id of ["optCommon", "optMissing", "optCat"]) $(id).addEventListener("change", () => update());
+for (const id of ["optCommon", "optMode", "optMissing", "optCat"]) $(id).addEventListener("change", () => update());
 $("more").addEventListener("click", () => { state.shown += PAGE; update(false); });
 $("dlg").addEventListener("click", (e) => { if (e.target === $("dlg")) $("dlg").close(); });
 load();
@@ -285,11 +291,8 @@ cameraInput.addEventListener('change', async (e) => {
     aiStatus.textContent = '🔍 냉장고 속 재료를 분석하는 중입니다...';
     btnTriggerCamera.disabled = true;
 
-    const detectedNames = await callGeminiVisionAPI(resizedBase64, apiKey);
-    aiStatus.textContent = `✨ 인식 완료: [ ${detectedNames.join(', ')} ]`;
-
-    // 3. 인식된 재료 체크박스 자동 선택
-    matchAndSelectIngredients(detectedNames);
+    // 재료 입력·검색 갱신과 결과 메시지는 callGeminiVisionAPI 안의 autoInputIngredients 가 처리한다
+    await callGeminiVisionAPI(resizedBase64, apiKey);
   } catch (error) {
     console.error('AI 인식 에러:', error);
     aiStatus.textContent = `❌ 인식 실패: ${error.message}`;
@@ -404,29 +407,6 @@ async function callGeminiVisionAPI(base64Image, apiKey) {
   }
 
   throw lastError || new Error('모든 Gemini 모델 호출에 실패했습니다.');
-}
-
-/* 기존 재료 체크박스 자동 매칭 및 이벤트 발생 */
-function matchAndSelectIngredients(detectedNames) {
-  detectedNames.forEach((name) => {
-    const cleanName = name.trim();
-
-    let targetName = cleanName;
-    if (window.aliasesData && window.aliasesData[cleanName]) {
-      targetName = window.aliasesData[cleanName];
-    }
-
-    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-    checkboxes.forEach((cb) => {
-      const labelText = cb.parentElement ? cb.parentElement.textContent.trim() : '';
-      if (labelText.includes(cleanName) || labelText.includes(targetName) || cb.value === cleanName) {
-        if (!cb.checked) {
-          cb.checked = true;
-          cb.dispatchEvent(new Event('change', { bubbles: true }));
-        }
-      }
-    });
-  });
 }
 
 function autoInputIngredients(detectedNames) {
