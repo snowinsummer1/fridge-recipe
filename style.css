@@ -473,4 +473,21 @@ dialog::backdrop { background: rgb(var(--shadow-rgb) / .55); backdrop-filter: bl
                --bg:#f4f9fa; --bg-2:#e6f0f2; --text:#14262a; --muted:#587076;
                --line:#d9e7ea; --line-strong:#c1d5da; --have:#1f9d55; --have-soft:#dff4e7;
                --miss:#d9680f; --miss-soft:#fff0e0; --shadow-rgb:14 50 58;
+   [민트 프레시] --accent: #0e9370;
+  --accent-ink: #0a7a5c;
+  --accent-soft: #dcf3ea;
+  --on-accent: #ffffff; 
+  --bg: #f5faf8;        
+  --bg-2: #e9f3ef;        
+  --surface: #ffffff;       
+  --text: #172521;
+  --muted: #5b6f69;
+  --line: #dde9e4;
+  --line-strong: #c5d8d0;
+  --have: #1f8a4c;          
+  --have-soft: #e0f3e6;
+  --miss: #c8620f;
+  --miss-soft: #fff0de;
+  --shadow-rgb: 16 48 40;
+
    ========================================================== */
