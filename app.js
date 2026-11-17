@@ -57,6 +57,7 @@ async function load() {
   renderQuick();
   update();
   renderRec(false);
+  renderPreview();
 }
 
 /* ---------- 메인 화면: 오늘의 추천 ---------- */
@@ -77,6 +78,24 @@ function renderRec(reroll) {
   const picks = new Set();
   while (picks.size < Math.min(3, pool.length)) picks.add(Math.floor(rand() * pool.length));
   $("recGrid").replaceChildren(...[...picks].map((i) => card({ r: pool[i], have: [], missing: [], staples: [] }, true)));
+}
+
+// 홈 미리보기 창: 실제 레시피 데이터(사진·이름·추가 재료 수)로 채운다. 실패하면 HTML의 기본 내용이 남는다.
+function renderPreview() {
+  const box = $("pvList");
+  if (!box) return;
+  const mine = new Set(["달걀", "두부"]);
+  const basic = new Set(state.staples.basic);
+  const rows = ["982", "932", "2958"].map((id) => state.recipes.find((r) => r.id === id)).filter((r) => r && r.img);
+  if (rows.length < 3) return;
+  box.replaceChildren(...rows.map((r) => {
+    const miss = r.ingredients.filter((i) => !basic.has(i) && !mine.has(i)).length;
+    return h("div", { class: "pv-row" },
+      h("div", { class: "pv-thumb", "data-e": "🍳" },
+        h("img", { src: r.img, alt: "", loading: "lazy", onerror: (e) => e.target.remove() })),
+      h("div", {}, h("b", {}, r.name), h("small", {}, metaText(r))),
+      h("em", { class: miss ? "" : "ok" }, miss ? `추가 ${miss}개` : "바로 가능"));
+  }));
 }
 
 /* ---------- 화면 전환 (메인 ↔ 요리하러 가기) ---------- */
