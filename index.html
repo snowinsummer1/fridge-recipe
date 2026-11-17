@@ -3,71 +3,100 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>냉장고 레시피</title>
+<meta name="theme-color" content="#fbf7f1">
+<title>냉장고 레시피 · 자취생 냉장고 털이</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <section id="home" class="home">
   <div class="wrap">
-    <h1 class="logo">냉장고 레시피</h1>
-    <p class="sub">오늘도 장 보기 귀찮은 자취생을 위한, <strong>냉장고 털이 레시피</strong>.</p>
-    <a class="start" id="start" href="#cook">요리하러 가기</a>
+    <div class="home-hero">
+      <div class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 48 48" width="56" height="56"><rect x="10" y="4" width="28" height="40" rx="6" fill="currentColor"/><rect x="10" y="19" width="28" height="2.5" fill="var(--surface)"/><rect x="14" y="9" width="2.5" height="6" rx="1.25" fill="var(--surface)"/><rect x="14" y="25" width="2.5" height="9" rx="1.25" fill="var(--surface)"/></svg>
+      </div>
+      <p class="eyebrow">자취생 냉장고 털이</p>
+      <h1 class="logo">냉장고 레시피</h1>
+      <p class="sub">남은 재료만 입력하면, <strong>장 안 보고도</strong> 만들 수 있는 요리부터 보여드려요.</p>
+      <a class="start" id="start" href="#cook">요리하러 가기 <span aria-hidden="true">→</span></a>
+
+      <ol class="howto">
+        <li><span class="num">1</span><div><b>재료 입력</b><small>타이핑하거나 냉장고 사진으로</small></div></li>
+        <li><span class="num">2</span><div><b>부족한 재료 확인</b><small>더 사야 할 게 적은 순으로</small></div></li>
+        <li><span class="num">3</span><div><b>바로 요리</b><small>단계별 사진 레시피</small></div></li>
+      </ol>
+    </div>
 
     <div class="rechead">
       <h2>오늘의 추천 레시피</h2>
-      <button type="button" id="reroll" class="clearall">다시 뽑기</button>
+      <button type="button" id="reroll" class="clearall">↻ 다시 뽑기</button>
     </div>
-    <div class="grid" id="recGrid" aria-live="polite"></div>
+    <div class="grid rec" id="recGrid" aria-live="polite"></div>
   </div>
 </section>
 
 <div id="app" hidden>
-<header class="hero">
-  <div class="wrap">
-    <a class="backhome" href="#">← 처음으로</a>
-    <h1>냉장고 레시피</h1>
-    <p class="sub">오늘도 장 보기 귀찮은 자취생을 위한, <strong>냉장고 털이 레시피</strong>.</p>
+<header class="topbar">
+  <div class="wrap topbar-in">
+    <a class="backhome" href="#"><span aria-hidden="true">←</span> 처음으로</a>
+    <span class="brand">냉장고 레시피</span>
+  </div>
+</header>
 
-    <div class="search">
+<section class="hero">
+  <div class="wrap">
+    <h1>오늘 냉장고에 뭐가 있나요?</h1>
+    <p class="sub">재료를 하나씩 넣으면, <strong>지금 바로 만들 수 있는 요리</strong>부터 찾아드려요.</p>
+
+    <div class="panel search">
       <div class="chips" id="chips" aria-live="polite"></div>
       <div class="inputrow">
+        <svg class="search-ico" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="m20 20-3.5-3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
         <input id="q" type="text" autocomplete="off" placeholder="재료 입력 (예: 두부, 달걀, 김치)" aria-label="재료 입력" aria-autocomplete="list" aria-controls="sugg">
         <ul id="sugg" class="sugg" role="listbox" hidden></ul>
       </div>
       <p class="hint" id="hint" role="status"></p>
+
+      <div class="quickwrap">
+        <span class="quick-label">자주 쓰는 재료</span>
+        <div class="quick" id="quick" aria-label="자주 쓰는 재료"></div>
+      </div>
     </div>
 
-    <div class="quick" id="quick" aria-label="자주 쓰는 재료"></div>
-
     <div class="ai-camera-container">
-      <h3>📷 냉장고 사진으로 재료 자동 인식</h3>
-      <input type="file" id="camera-input" accept="image/*" capture="environment" style="display: none;" />
-      <button type="button" id="btn-trigger-camera" class="btn-primary">사진 촬영 / 업로드</button>
-      
+      <div class="cam-row">
+        <span class="cam-ico" aria-hidden="true">📷</span>
+        <div class="cam-text">
+          <h3>냉장고 사진으로 재료 자동 인식</h3>
+          <p>사진 한 장이면 AI가 재료를 찾아 위에 넣어줘요.</p>
+        </div>
+        <input type="file" id="camera-input" accept="image/*" capture="environment" hidden>
+        <button type="button" id="btn-trigger-camera" class="btn-primary">사진 촬영 / 업로드</button>
+      </div>
       <div id="ai-status" class="ai-status-text"></div>
       <div id="image-preview-box" class="preview-box" style="display: none;">
-        <img id="image-preview" alt="냉장고 사진 미리보기" />
+        <img id="image-preview" alt="냉장고 사진 미리보기">
       </div>
     </div>
   </div>
-</header>
+</section>
 
-<main class="wrap">
-  <section class="options" aria-label="옵션">
-    <label class="opt">검색 방식
+<main class="wrap results">
+  <section class="options" aria-label="검색 옵션">
+    <label class="opt"><span class="optlabel">검색 방식</span>
       <select id="optMode">
         <option value="all" selected>입력한 재료 모두 포함</option>
-        <option value="any">하나라도 포함 (기존)</option>
+        <option value="any">하나라도 포함</option>
       </select>
     </label>
-    <label class="opt" id="sortOpt" hidden>정렬
+    <label class="opt" id="sortOpt" hidden><span class="optlabel">정렬</span>
       <select id="optSort">
         <option value="missing" selected>추가 재료 적은 순</option>
         <option value="have">내 재료 많이 쓰는 순</option>
       </select>
     </label>
-    <label class="opt"><input type="checkbox" id="optCommon"> 마늘·대파·양파·고춧가루 같은 <b>흔한 양념도 집에 있다</b>고 치기</label>
-    <label class="opt">추가 재료
+    <label class="opt"><span class="optlabel">추가 재료</span>
       <select id="optMissing">
         <option value="0">0개 (지금 바로)</option>
         <option value="1">1개 이하</option>
@@ -77,8 +106,13 @@
         <option value="99" selected>제한 없음</option>
       </select>
     </label>
-    <label class="opt">종류
+    <label class="opt"><span class="optlabel">종류</span>
       <select id="optCat"><option value="">전체</option></select>
+    </label>
+    <label class="opt switch">
+      <input type="checkbox" id="optCommon">
+      <span class="track" aria-hidden="true"></span>
+      <span class="switch-text"><b>흔한 양념은 집에 있음</b><small>마늘·대파·양파·고춧가루 등</small></span>
     </label>
   </section>
 
@@ -87,15 +121,19 @@
   <div class="more"><button id="more" hidden>더 보기</button></div>
 </main>
 
-
 <footer class="wrap foot">
+  <details id="apiKeySection" class="apikey">
+    <summary>⚙️ AI 사진 인식 설정 <span id="keyStatus"></span></summary>
+    <div class="apikey-body">
+      <label for="apiKeyInput">Gemini API 키</label>
+      <div class="apikey-row">
+        <input type="password" id="apiKeyInput" placeholder="API 키를 입력하세요" autocomplete="off">
+        <button id="saveKeyBtn" type="button">저장</button>
+      </div>
+      <small>키는 이 브라우저 탭(sessionStorage)에만 저장되고, 탭을 닫으면 사라져요.</small>
+    </div>
+  </details>
   <p>레시피 데이터: 식품의약품안전처 「조리식품의 레시피 DB」(공공데이터). 재료 매칭은 자동 정리된 결과라 일부 부정확할 수 있어요.</p>
-  <div id="apiKeySection" class="apikey">
-    <label for="apiKeyInput">Gemini API Key: </label>
-    <input type="password" id="apiKeyInput" placeholder="API 키를 입력하세요">
-    <button id="saveKeyBtn">저장</button>
-    <span id="keyStatus"></span>
-  </div>
 </footer>
 </div>
 
@@ -107,5 +145,3 @@
 <script src="app.js"></script>
 </body>
 </html>
-
-

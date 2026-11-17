@@ -324,7 +324,12 @@ cameraInput.addEventListener('change', async (e) => {
   const apiKey = sessionStorage.getItem('gemini_api_key') || configKey;
 
   if (!apiKey) {
-    alert('Gemini API 키가 설정되지 않았습니다. 하단에서 키를 입력하고 저장해 주세요.');
+    aiStatus.textContent = '🔑 Gemini API 키가 필요해요. 아래 설정에서 키를 입력하고 저장해 주세요.';
+    const keyBox = document.getElementById('apiKeySection');
+    keyBox.open = true;
+    keyBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    document.getElementById('apiKeyInput').focus({ preventScroll: true });
+    e.target.value = '';
     return;
   }
 
