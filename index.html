@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#fbf7f1">
+<meta name="theme-color" content="#f5faf8">
 <title>냉장고 레시피 · 자취생 냉장고 털이</title>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
@@ -28,11 +28,6 @@
       </ol>
     </div>
 
-    <div class="rechead">
-      <h2>오늘의 추천 레시피</h2>
-      <button type="button" id="reroll" class="clearall">↻ 다시 뽑기</button>
-    </div>
-    <div class="grid rec" id="recGrid" aria-live="polite"></div>
   </div>
 </section>
 
@@ -49,6 +44,8 @@
     <h1>오늘 냉장고에 뭐가 있나요?</h1>
     <p class="sub">재료를 하나씩 넣으면, <strong>지금 바로 만들 수 있는 요리</strong>부터 찾아드려요.</p>
 
+    <div class="hero-grid">
+    <div class="hero-main">
     <div class="panel search">
       <div class="chips" id="chips" aria-live="polite"></div>
       <div class="inputrow">
@@ -78,6 +75,16 @@
       <div id="image-preview-box" class="preview-box" style="display: none;">
         <img id="image-preview" alt="냉장고 사진 미리보기">
       </div>
+    </div>
+    </div>
+
+    <aside class="panel rec-side" aria-label="오늘의 추천 레시피">
+      <div class="rechead">
+        <h2>오늘의 추천 레시피</h2>
+        <button type="button" id="reroll" class="clearall">↻ 다시 뽑기</button>
+      </div>
+      <div class="rec-list" id="recGrid" aria-live="polite"></div>
+    </aside>
     </div>
   </div>
 </section>

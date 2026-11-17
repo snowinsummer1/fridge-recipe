@@ -1,43 +1,52 @@
 /* ==========================================================
    냉장고 레시피 — 스타일
    ========================================================== */
+/* ----------------------------------------------------------
+   색상 팔레트 — 이 두 블록(라이트/다크)의 값만 바꾸면 사이트 전체 색이 바뀝니다.
+   다른 시안(오션 블루, 청록)은 파일 맨 아래 주석에 있어요.
+   ---------------------------------------------------------- */
 :root {
-  --bg: #fbf7f1;
-  --bg-2: #f4ede3;
-  --surface: #ffffff;
-  --text: #2a241e;
-  --muted: #7b7165;
-  --line: #ebe2d6;
-  --line-strong: #dccfbf;
-  --accent: #e2602a;
-  --accent-ink: #c94f1c;
-  --accent-soft: #fdeadf;
-  --have: #2c8a57;
-  --have-soft: #e1f3e8;
-  --miss: #b9560f;
-  --miss-soft: #fdecd8;
+  /* 현재 적용: 민트 프레시 */
+  --accent: #0e9370;        /* 메인 색: 버튼, 선택한 재료 칩, 강조 */
+  --accent-ink: #0a7a5c;    /* 메인 색의 진한 버전 (마우스 올렸을 때) */
+  --accent-soft: #dcf3ea;   /* 메인 색의 연한 배경 */
+  --on-accent: #ffffff;     /* 메인 색 위의 글자색 */
+  --bg: #f5faf8;            /* 페이지 배경 */
+  --bg-2: #e9f3ef;          /* 옵션 영역 등 한 톤 진한 배경 */
+  --surface: #ffffff;       /* 카드·패널 배경 */
+  --text: #172521;
+  --muted: #5b6f69;
+  --line: #dde9e4;
+  --line-strong: #c5d8d0;
+  --have: #1f8a4c;          /* 내가 가진 재료 태그 */
+  --have-soft: #e0f3e6;
+  --miss: #c8620f;          /* 더 사야 하는 재료 태그 */
+  --miss-soft: #fff0de;
+  --shadow-rgb: 16 48 40;   /* 그림자 색 (R G B) */
+
   --radius: 16px;
-  --shadow-sm: 0 1px 2px rgba(60, 40, 20, .05);
-  --shadow: 0 1px 2px rgba(60, 40, 20, .05), 0 6px 20px rgba(60, 40, 20, .07);
-  --shadow-lg: 0 2px 4px rgba(60, 40, 20, .06), 0 14px 34px rgba(60, 40, 20, .12);
+  --shadow-sm: 0 1px 2px rgb(var(--shadow-rgb) / .05);
+  --shadow: 0 1px 2px rgb(var(--shadow-rgb) / .05), 0 6px 20px rgb(var(--shadow-rgb) / .07);
+  --shadow-lg: 0 2px 4px rgb(var(--shadow-rgb) / .06), 0 14px 34px rgb(var(--shadow-rgb) / .12);
   color-scheme: light;
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #171411;
-    --bg-2: #1f1b17;
-    --surface: #24201b;
-    --text: #f2ece4;
-    --muted: #a99f92;
-    --line: #36302a;
-    --line-strong: #4a4239;
-    --accent: #f08a57;
-    --accent-ink: #f6a47a;
-    --accent-soft: #452b1d;
+    --accent: #34c79c;
+    --accent-ink: #62d8b4;
+    --accent-soft: #123a2e;
+    --on-accent: #062018;
+    --bg: #0e1614;
+    --bg-2: #14201c;
+    --surface: #18241f;
+    --text: #e6f1ed;
+    --muted: #91a79f;
+    --line: #24332e;
+    --line-strong: #33463f;
     --have: #6fd39d;
-    --have-soft: #1d3628;
+    --have-soft: #173727;
     --miss: #f3a766;
-    --miss-soft: #43301e;
+    --miss-soft: #3d2c1c;
     --shadow-sm: none;
     --shadow: 0 0 0 1px rgba(255, 255, 255, .02);
     --shadow-lg: 0 14px 34px rgba(0, 0, 0, .45);
@@ -65,7 +74,7 @@ button, select, input { font: inherit; }
 /* ---------- 공통 버튼 ---------- */
 .btn-primary {
   padding: 10px 20px; border-radius: 999px; border: 0; cursor: pointer; white-space: nowrap;
-  background: var(--accent); color: #fff; font-weight: 700;
+  background: var(--accent); color: var(--on-accent); font-weight: 700;
   transition: background .15s, transform .15s;
 }
 .btn-primary:hover { background: var(--accent-ink); }
@@ -80,10 +89,9 @@ button, select, input { font: inherit; }
 /* ==========================================================
    메인(홈)
    ========================================================== */
-.home { padding: 0 0 56px; }
+.home { min-height: 100vh; min-height: 100svh; display: grid; align-items: center; padding: 24px 0; }
 .home-hero {
-  text-align: center; padding: 64px 0 52px; margin-bottom: 40px;
-  border-bottom: 1px solid var(--line);
+  text-align: center; padding: 40px 0;
 }
 .brand-mark {
   width: 84px; height: 84px; margin: 0 auto 18px; border-radius: 26px;
@@ -97,11 +105,11 @@ button, select, input { font: inherit; }
 .home .sub { font-size: 1.08rem; margin-bottom: 30px; }
 .start {
   display: inline-flex; align-items: center; gap: 10px; padding: 16px 40px; border-radius: 999px;
-  background: var(--accent); color: #fff; font-size: 1.15rem; font-weight: 700; text-decoration: none;
-  box-shadow: 0 8px 22px rgba(226, 96, 42, .32); transition: transform .15s, background .15s, box-shadow .15s;
+  background: var(--accent); color: var(--on-accent); font-size: 1.15rem; font-weight: 700; text-decoration: none;
+  box-shadow: 0 8px 22px color-mix(in srgb, var(--accent) 32%, transparent); transition: transform .15s, background .15s, box-shadow .15s;
 }
 .start span { transition: transform .15s; }
-.start:hover, .start:focus-visible { background: var(--accent-ink); transform: translateY(-2px); box-shadow: 0 12px 28px rgba(226, 96, 42, .38); }
+.start:hover, .start:focus-visible { background: var(--accent-ink); transform: translateY(-2px); box-shadow: 0 12px 28px color-mix(in srgb, var(--accent) 40%, transparent); }
 .start:hover span { transform: translateX(4px); }
 
 .howto {
@@ -119,9 +127,6 @@ button, select, input { font: inherit; }
 .howto b { display: block; font-size: .95rem; }
 .howto small { color: var(--muted); font-size: .82rem; }
 
-.rechead { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
-.rechead h2 { margin: 0; font-size: 1.25rem; }
-.grid.rec { grid-template-columns: repeat(3, 1fr); }
 
 /* ==========================================================
    요리 화면: 상단바 + 검색
@@ -142,6 +147,25 @@ button, select, input { font: inherit; }
 
 .hero { padding: 32px 0 8px; }
 
+/* 왼쪽: 재료 입력 / 오른쪽: 오늘의 추천 */
+.hero-grid { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 16px; align-items: start; }
+.hero-main { min-width: 0; }
+.rec-side { padding: 14px; position: sticky; top: 70px; }
+.rechead { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px; }
+.rechead h2 { margin: 0; font-size: 1rem; }
+.rechead .clearall { font-size: .8rem; padding: 4px 10px; white-space: nowrap; }
+.rec-list { display: flex; flex-direction: column; gap: 10px; }
+.rec-list .card {
+  flex-direction: row; align-items: stretch; box-shadow: none; border-radius: 12px;
+}
+.rec-list .card:hover, .rec-list .card:focus-visible { transform: translateY(-2px); box-shadow: var(--shadow); }
+.rec-list .thumb { flex: none; width: 112px; aspect-ratio: 1 / 1; }
+.rec-list .thumb::before { font-size: 1.6rem; }
+.rec-list .cbody { justify-content: center; padding: 10px 12px; }
+.rec-list .cbody h3 { font-size: .95rem; }
+.rec-list .meta { margin: 2px 0 0; font-size: .76rem; }
+.rec-list .tags:empty { display: none; }
+
 .panel {
   background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
   box-shadow: var(--shadow); padding: 16px;
@@ -150,17 +174,17 @@ button, select, input { font: inherit; }
 .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; align-items: center; }
 .chip {
   display: inline-flex; align-items: center; gap: 2px;
-  background: var(--accent); color: #fff;
+  background: var(--accent); color: var(--on-accent);
   border-radius: 999px; padding: 5px 4px 5px 13px; font-size: .92rem; font-weight: 600;
   animation: pop .18s ease-out;
 }
 @keyframes pop { from { transform: scale(.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 .chip button {
-  border: 0; background: rgba(255, 255, 255, .22); color: inherit; cursor: pointer;
+  border: 0; background: color-mix(in srgb, var(--on-accent) 22%, transparent); color: inherit; cursor: pointer;
   width: 20px; height: 20px; border-radius: 50%; margin-left: 4px;
   display: grid; place-items: center; font-size: .95rem; line-height: 1; padding: 0;
 }
-.chip button:hover { background: rgba(255, 255, 255, .4); }
+.chip button:hover { background: color-mix(in srgb, var(--on-accent) 40%, transparent); }
 .nochip { color: var(--muted); font-size: .9rem; padding: 4px 2px; }
 
 .inputrow { position: relative; }
@@ -234,7 +258,7 @@ button, select, input { font: inherit; }
 select {
   appearance: none; -webkit-appearance: none;
   padding: 8px 34px 8px 12px; border-radius: 10px; border: 1px solid var(--line-strong);
-  background: var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2.5 4.5 6 8l3.5-3.5' fill='none' stroke='%237b7165' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 12px center;
+  background: var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2.5 4.5 6 8l3.5-3.5' fill='none' stroke='%23869690' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 12px center;
   color: var(--text); cursor: pointer; min-width: 120px;
 }
 select:hover { border-color: var(--accent); }
@@ -287,7 +311,7 @@ select:hover { border-color: var(--accent); }
   font-size: .78rem; font-weight: 700; background: var(--surface); color: var(--miss);
   box-shadow: 0 2px 8px rgba(0, 0, 0, .12);
 }
-.badge.zero { background: var(--have); color: #fff; }
+.badge.zero { background: var(--have); color: var(--surface); }
 .cbody { padding: 13px 15px 16px; display: flex; flex-direction: column; flex: 1; }
 .cbody h3 {
   margin: 0 0 3px; font-size: 1.04rem; line-height: 1.35;
@@ -308,7 +332,7 @@ select:hover { border-color: var(--accent); }
   background: var(--surface); color: var(--accent); cursor: pointer; font-weight: 700;
   transition: background .15s, color .15s;
 }
-.more button:hover { background: var(--accent); color: #fff; }
+.more button:hover { background: var(--accent); color: var(--on-accent); }
 .empty {
   grid-column: 1 / -1; text-align: center; color: var(--muted); padding: 56px 16px;
   border: 1.5px dashed var(--line-strong); border-radius: var(--radius); margin: 0;
@@ -353,7 +377,7 @@ dialog {
 }
 dialog[open] { animation: rise .22s ease-out; }
 @keyframes rise { from { transform: translateY(16px); opacity: 0; } to { transform: none; opacity: 1; } }
-dialog::backdrop { background: rgba(20, 14, 8, .55); backdrop-filter: blur(3px); }
+dialog::backdrop { background: rgb(var(--shadow-rgb) / .55); backdrop-filter: blur(3px); }
 .dhead { position: relative; }
 .dhead img { width: 100%; max-height: 340px; aspect-ratio: 16 / 9; object-fit: cover; display: block; background: var(--bg-2); color: transparent; }
 .close {
@@ -381,7 +405,7 @@ dialog::backdrop { background: rgba(20, 14, 8, .55); backdrop-filter: blur(3px);
 .steps li:last-child { border-bottom: 0; margin-bottom: 0; }
 .steps li::before {
   content: counter(s); grid-row: 1 / span 2; width: 28px; height: 28px; border-radius: 50%;
-  background: var(--accent); color: #fff; font-size: .82rem; font-weight: 800;
+  background: var(--accent); color: var(--on-accent); font-size: .82rem; font-weight: 800;
   display: flex; align-items: center; justify-content: center;
 }
 .steps img { max-width: 280px; width: 100%; border-radius: 12px; }
@@ -392,9 +416,14 @@ dialog::backdrop { background: rgba(20, 14, 8, .55); backdrop-filter: blur(3px);
 /* ==========================================================
    반응형
    ========================================================== */
-@media (max-width: 760px) {
-  .grid.rec { grid-template-columns: repeat(2, 1fr); }
-  .grid.rec > :nth-child(3) { display: none; }
+@media (max-width: 880px) {
+  .hero-grid { grid-template-columns: 1fr; }
+  .rec-side { position: static; }
+  /* 좁은 화면: 추천은 가로로 넘겨 보는 카드 */
+  .rec-list { flex-direction: row; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; margin: 0 -14px; padding: 0 14px 4px; }
+  .rec-list::-webkit-scrollbar { display: none; }
+  .rec-list .card { flex: 0 0 min(220px, 62%); flex-direction: column; scroll-snap-align: start; }
+  .rec-list .thumb { width: 100%; aspect-ratio: 4 / 3; }
 }
 @media (max-width: 640px) {
   .wrap { padding: 0 16px; }
@@ -432,3 +461,16 @@ dialog::backdrop { background: rgba(20, 14, 8, .55); backdrop-filter: blur(3px);
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
+
+/* ==========================================================
+   다른 색상 시안 — 쓰고 싶으면 맨 위 :root 의 같은 이름 값을 아래 값으로 바꾸세요.
+   ----------------------------------------------------------
+   [오션 블루]  --accent:#2563eb; --accent-ink:#1d4ed8; --accent-soft:#e3ecff; --on-accent:#fff;
+               --bg:#f6f8fc; --bg-2:#eaf0f8; --text:#16203a; --muted:#5b6880;
+               --line:#dfe6f0; --line-strong:#c8d3e3; --have:#16a34a; --have-soft:#dff5e7;
+               --miss:#d9680f; --miss-soft:#fff0e0; --shadow-rgb:20 35 70;
+   [청록 틸]    --accent:#0e8a9e; --accent-ink:#0a6f80; --accent-soft:#daf1f4; --on-accent:#fff;
+               --bg:#f4f9fa; --bg-2:#e6f0f2; --text:#14262a; --muted:#587076;
+               --line:#d9e7ea; --line-strong:#c1d5da; --have:#1f9d55; --have-soft:#dff4e7;
+               --miss:#d9680f; --miss-soft:#fff0e0; --shadow-rgb:14 50 58;
+   ========================================================== */
