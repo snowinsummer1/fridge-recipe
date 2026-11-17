@@ -53,6 +53,7 @@ async function load() {
   if (opts.missing) $("optMissing").value = opts.missing;
   if (opts.cat) $("optCat").value = opts.cat;
 
+  if ($("statCount")) $("statCount").textContent = state.recipes.length.toLocaleString("ko-KR");
   renderQuick();
   update();
   renderRec(false);
@@ -83,7 +84,10 @@ function route() {
   const inApp = location.hash === "#cook";
   $("home").hidden = inApp;
   $("app").hidden = !inApp;
-  window.scrollTo(0, 0);
+  document.body.dataset.page = inApp ? "cook" : "home";   // 상단 메뉴의 현재 위치 표시용
+  const anchor = !inApp && location.hash.length > 1 ? document.getElementById(location.hash.slice(1)) : null;
+  if (anchor) anchor.scrollIntoView({ behavior: "smooth" });
+  else window.scrollTo(0, 0);
 }
 
 /* ---------- 매칭 ---------- */
