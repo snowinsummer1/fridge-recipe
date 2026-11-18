@@ -40359,38 +40359,6 @@
     }
   },
   {
-    "id": "2980",
-    "name": "비타 오이 물김치",
-    "category": "반찬",
-    "method": "기타",
-    "img": "https://www.foodsafetykorea.go.kr/uploadimg/20190408/20190408013158_1554697918452.jpg",
-    "ingredients": [
-      "오이",
-      "무",
-      "홍고추",
-      "파프리카",
-      "당근",
-      "미나리",
-      "식초",
-      "배",
-      "고춧가루",
-      "설탕"
-    ],
-    "partsText": "오이 30g, 무 50g, 홍고추 10g, 파프리카 20g, 당근 20g, 미나리 10g, 식초 30g, 배 30g, 고춧가루 10g, 설탕 5g",
-    "steps": [],
-    "tip": "재료를 소금에 절이지 않고 얇게 잘라 나트륨 첨가를 줄였어요.",
-    "tags": [],
-    "minutes": 10,
-    "minutesEst": true,
-    "nutrition": {
-      "kcal": 13.46,
-      "carb": 2.99,
-      "protein": 0.34,
-      "fat": 0.02,
-      "sodium": 30.88
-    }
-  },
-  {
     "id": "3069",
     "name": "새우살토마토스튜",
     "category": "국&찌개",
@@ -66649,7 +66617,7 @@
     "name": "김치볶음밥",
     "category": "밥",
     "method": "볶기",
-    "img": null,
+    "img": "img/김치볶음밥.jpg",
     "ingredients": [
       "밥",
       "김치",
@@ -66697,7 +66665,7 @@
     "name": "계란볶음밥",
     "category": "밥",
     "method": "볶기",
-    "img": null,
+    "img": "img/계란볶음밥.jpg",
     "ingredients": [
       "밥",
       "달걀",
@@ -66744,7 +66712,7 @@
     "name": "참치마요덮밥",
     "category": "밥",
     "method": "기타",
-    "img": null,
+    "img": "img/참치마요덮밥.webp",
     "ingredients": [
       "밥",
       "참치",
@@ -66788,7 +66756,7 @@
     "name": "간장계란밥",
     "category": "밥",
     "method": "기타",
-    "img": null,
+    "img": "img/간장계란밥.jpg",
     "ingredients": [
       "밥",
       "달걀",
@@ -66830,7 +66798,7 @@
     "name": "스팸마요덮밥",
     "category": "밥",
     "method": "굽기",
-    "img": null,
+    "img": "img/스팸마요덮밥.jpg",
     "ingredients": [
       "밥",
       "햄",
@@ -66877,7 +66845,7 @@
     "name": "계란덮밥",
     "category": "밥",
     "method": "끓이기",
-    "img": null,
+    "img": "img/계란덮밥.png",
     "ingredients": [
       "밥",
       "달걀",
@@ -66926,7 +66894,7 @@
     "name": "참치김치볶음밥",
     "category": "밥",
     "method": "볶기",
-    "img": null,
+    "img": "img/참치김치볶음밥.jpg",
     "ingredients": [
       "밥",
       "김치",
@@ -66974,7 +66942,7 @@
     "name": "소고기덮밥",
     "category": "밥",
     "method": "볶기",
-    "img": null,
+    "img": "img/소고기덮밥.jpg",
     "ingredients": [
       "밥",
       "소고기",
@@ -67023,7 +66991,7 @@
     "name": "카레라이스",
     "category": "밥",
     "method": "끓이기",
-    "img": null,
+    "img": "img/카레라이스.jpg",
     "ingredients": [
       "밥",
       "카레가루",
@@ -67075,7 +67043,7 @@
     "name": "오므라이스",
     "category": "밥",
     "method": "볶기",
-    "img": null,
+    "img": "img/오므라이스.jpg",
     "ingredients": [
       "밥",
       "달걀",
@@ -67123,7 +67091,7 @@
     "name": "새우볶음밥",
     "category": "밥",
     "method": "볶기",
-    "img": null,
+    "img": "img/새우볶음밥.jpg",
     "ingredients": [
       "밥",
       "새우",
@@ -67171,7 +67139,7 @@
     "name": "간단비빔밥",
     "category": "밥",
     "method": "기타",
-    "img": null,
+    "img": "img/간단비빔밥.jpg",
     "ingredients": [
       "밥",
       "콩나물",
@@ -67220,7 +67188,7 @@
     "name": "참치마요주먹밥",
     "category": "밥",
     "method": "기타",
-    "img": null,
+    "img": "img/참치마요주먹밥.jpg",
     "ingredients": [
       "밥",
       "참치",
@@ -67263,7 +67231,7 @@
     "name": "콩나물밥",
     "category": "밥",
     "method": "끓이기",
-    "img": null,
+    "img": "img/콩나물밥.jpg",
     "ingredients": [
       "쌀",
       "콩나물",
@@ -67315,7 +67283,7 @@
     "name": "김치덮밥",
     "category": "밥",
     "method": "볶기",
-    "img": null,
+    "img": "img/김치덮밥.jpg",
     "ingredients": [
       "밥",
       "김치",
@@ -67363,7 +67331,7 @@
     "name": "제육덮밥",
     "category": "밥",
     "method": "볶기",
-    "img": null,
+    "img": "img/제육덮밥.webp",
     "ingredients": [
       "밥",
       "돼지고기",
@@ -67413,7 +67381,7 @@
     "name": "치킨마요덮밥",
     "category": "밥",
     "method": "볶기",
-    "img": null,
+    "img": "img/치킨마요덮밥.jpg",
     "ingredients": [
       "밥",
       "닭가슴살",
@@ -67462,7 +67430,7 @@
     "name": "참치김밥",
     "category": "밥",
     "method": "기타",
-    "img": null,
+    "img": "img/참치김밥.jpg",
     "ingredients": [
       "밥",
       "김",
@@ -67513,7 +67481,7 @@
     "name": "김가루주먹밥",
     "category": "밥",
     "method": "기타",
-    "img": null,
+    "img": "img/김가루주먹밥.jpg",
     "ingredients": [
       "밥",
       "김가루",
@@ -67556,7 +67524,7 @@
     "name": "햄야채볶음밥",
     "category": "밥",
     "method": "볶기",
-    "img": null,
+    "img": "img/햄야채볶음밥.jpg",
     "ingredients": [
       "밥",
       "햄",
@@ -67605,7 +67573,7 @@
     "name": "소시지마요덮밥",
     "category": "밥",
     "method": "볶기",
-    "img": null,
+    "img": "img/소시지마요덮밥.jpg",
     "ingredients": [
       "밥",
       "소시지",
@@ -67652,7 +67620,7 @@
     "name": "계란죽",
     "category": "밥",
     "method": "끓이기",
-    "img": null,
+    "img": "img/계란죽.webp",
     "ingredients": [
       "밥",
       "달걀",
@@ -67695,7 +67663,7 @@
     "name": "김치죽",
     "category": "밥",
     "method": "끓이기",
-    "img": null,
+    "img": "img/김치죽.jpg",
     "ingredients": [
       "밥",
       "김치",
@@ -67741,7 +67709,7 @@
     "name": "김치찌개",
     "category": "국&찌개",
     "method": "끓이기",
-    "img": null,
+    "img": "img/김치찌개.jpg",
     "ingredients": [
       "김치",
       "돼지고기",
@@ -67791,7 +67759,7 @@
     "name": "참치김치찌개",
     "category": "국&찌개",
     "method": "끓이기",
-    "img": null,
+    "img": "img/참치김치찌개.jpg",
     "ingredients": [
       "김치",
       "참치",
@@ -67840,7 +67808,7 @@
     "name": "된장찌개",
     "category": "국&찌개",
     "method": "끓이기",
-    "img": null,
+    "img": "img/된장찌개.jpg",
     "ingredients": [
       "된장",
       "애호박",
@@ -67891,7 +67859,7 @@
     "name": "순두부찌개",
     "category": "국&찌개",
     "method": "끓이기",
-    "img": null,
+    "img": "img/순두부찌개.jpg",
     "ingredients": [
       "순두부",
       "돼지고기",
@@ -67942,7 +67910,7 @@
     "name": "부대찌개",
     "category": "국&찌개",
     "method": "끓이기",
-    "img": null,
+    "img": "img/부대찌개.jpg",
     "ingredients": [
       "햄",
       "소시지",
@@ -67994,7 +67962,7 @@
     "name": "계란국",
     "category": "국&찌개",
     "method": "끓이기",
-    "img": null,
+    "img": "img/계란국.webp",
     "ingredients": [
       "달걀",
       "대파",
@@ -68042,7 +68010,7 @@
     "name": "콩나물국",
     "category": "국&찌개",
     "method": "끓이기",
-    "img": null,
+    "img": "img/콩나물국.jpg",
     "ingredients": [
       "콩나물",
       "대파",
@@ -68089,7 +68057,7 @@
     "name": "소고기미역국",
     "category": "국&찌개",
     "method": "끓이기",
-    "img": null,
+    "img": "img/소고기미역국.jpg",
     "ingredients": [
       "미역",
       "소고기",
@@ -68136,7 +68104,7 @@
     "name": "어묵탕",
     "category": "국&찌개",
     "method": "끓이기",
-    "img": null,
+    "img": "img/어묵탕.webp",
     "ingredients": [
       "어묵",
       "무",
@@ -68185,7 +68153,7 @@
     "name": "북엇국",
     "category": "국&찌개",
     "method": "끓이기",
-    "img": null,
+    "img": "img/북엇국.jpg",
     "ingredients": [
       "북어채",
       "무",
@@ -68235,7 +68203,7 @@
     "name": "떡국",
     "category": "국&찌개",
     "method": "끓이기",
-    "img": null,
+    "img": "img/떡국.png",
     "ingredients": [
       "떡국떡",
       "소고기",
@@ -68290,7 +68258,7 @@
     "name": "만둣국",
     "category": "국&찌개",
     "method": "끓이기",
-    "img": null,
+    "img": "img/만둣국.jpg",
     "ingredients": [
       "만두",
       "달걀",
@@ -68339,7 +68307,7 @@
     "name": "감자국",
     "category": "국&찌개",
     "method": "끓이기",
-    "img": null,
+    "img": "img/감자국.jpg",
     "ingredients": [
       "감자",
       "양파",
@@ -68387,7 +68355,7 @@
     "name": "오징어무국",
     "category": "국&찌개",
     "method": "끓이기",
-    "img": null,
+    "img": "img/오징어무국.jpg",
     "ingredients": [
       "오징어",
       "무",
@@ -68434,7 +68402,7 @@
     "name": "콩나물김치국",
     "category": "국&찌개",
     "method": "끓이기",
-    "img": null,
+    "img": "img/콩나물김치국.png",
     "ingredients": [
       "콩나물",
       "김치",
@@ -68481,7 +68449,7 @@
     "name": "시금치된장국",
     "category": "국&찌개",
     "method": "끓이기",
-    "img": null,
+    "img": "img/시금치된장국.jpg",
     "ingredients": [
       "시금치",
       "된장",
@@ -68528,7 +68496,7 @@
     "name": "육개장",
     "category": "국&찌개",
     "method": "끓이기",
-    "img": null,
+    "img": "img/육개장.jpg",
     "ingredients": [
       "소고기",
       "숙주",
@@ -68584,7 +68552,7 @@
     "name": "계란라면",
     "category": "일품",
     "method": "끓이기",
-    "img": null,
+    "img": "img/계란라면.jpg",
     "ingredients": [
       "라면",
       "달걀",
@@ -68628,7 +68596,7 @@
     "name": "치즈라면",
     "category": "일품",
     "method": "끓이기",
-    "img": null,
+    "img": "img/치즈라면.jpg",
     "ingredients": [
       "라면",
       "슬라이스치즈",
@@ -68669,7 +68637,7 @@
     "name": "짜파구리",
     "category": "일품",
     "method": "끓이기",
-    "img": null,
+    "img": "img/짜파구리.jpg",
     "ingredients": [
       "라면",
       "물",
@@ -68713,7 +68681,7 @@
     "name": "비빔국수",
     "category": "일품",
     "method": "기타",
-    "img": null,
+    "img": "img/비빔국수.jpg",
     "ingredients": [
       "소면",
       "고추장",
@@ -68764,7 +68732,7 @@
     "name": "잔치국수",
     "category": "일품",
     "method": "끓이기",
-    "img": null,
+    "img": "img/잔치국수.jpg",
     "ingredients": [
       "소면",
       "멸치",
@@ -68816,7 +68784,7 @@
     "name": "간장비빔국수",
     "category": "일품",
     "method": "기타",
-    "img": null,
+    "img": "img/간장비빔국수.jpg",
     "ingredients": [
       "소면",
       "간장",
@@ -68860,7 +68828,7 @@
     "name": "칼국수",
     "category": "일품",
     "method": "끓이기",
-    "img": null,
+    "img": "img/칼국수.webp",
     "ingredients": [
       "칼국수면",
       "멸치",
@@ -68910,7 +68878,7 @@
     "name": "수제비",
     "category": "일품",
     "method": "끓이기",
-    "img": null,
+    "img": "img/수제비.jpg",
     "ingredients": [
       "밀가루",
       "물",
@@ -68965,7 +68933,7 @@
     "name": "알리오올리오",
     "category": "일품",
     "method": "볶기",
-    "img": null,
+    "img": "img/알리오올리오.png",
     "ingredients": [
       "스파게티",
       "마늘",
@@ -69012,7 +68980,7 @@
     "name": "토마토파스타",
     "category": "일품",
     "method": "끓이기",
-    "img": null,
+    "img": "img/토마토파스타.jpg",
     "ingredients": [
       "스파게티",
       "토마토소스",
@@ -69062,7 +69030,7 @@
     "name": "까르보나라",
     "category": "일품",
     "method": "볶기",
-    "img": null,
+    "img": "img/까르보나라.jpg",
     "ingredients": [
       "스파게티",
       "베이컨",
@@ -69110,7 +69078,7 @@
     "name": "크림파스타",
     "category": "일품",
     "method": "끓이기",
-    "img": null,
+    "img": "img/크림파스타.jpg",
     "ingredients": [
       "스파게티",
       "생크림",
@@ -69161,7 +69129,7 @@
     "name": "떡볶이",
     "category": "일품",
     "method": "끓이기",
-    "img": null,
+    "img": "img/떡볶이.jpg",
     "ingredients": [
       "떡볶이떡",
       "어묵",
@@ -69210,7 +69178,7 @@
     "name": "로제떡볶이",
     "category": "일품",
     "method": "끓이기",
-    "img": null,
+    "img": "img/로제떡볶이.png",
     "ingredients": [
       "떡볶이떡",
       "어묵",
@@ -69261,7 +69229,7 @@
     "name": "라볶이",
     "category": "일품",
     "method": "끓이기",
-    "img": null,
+    "img": "img/라볶이.jpg",
     "ingredients": [
       "떡볶이떡",
       "라면",
@@ -69307,7 +69275,7 @@
     "name": "김치전",
     "category": "일품",
     "method": "부치기",
-    "img": null,
+    "img": "img/김치전.png",
     "ingredients": [
       "김치",
       "부침가루",
@@ -69353,7 +69321,7 @@
     "name": "파전",
     "category": "일품",
     "method": "부치기",
-    "img": null,
+    "img": "img/파전.jpg",
     "ingredients": [
       "쪽파",
       "부침가루",
@@ -69401,7 +69369,7 @@
     "name": "감자전",
     "category": "일품",
     "method": "부치기",
-    "img": null,
+    "img": "img/감자전.jpg",
     "ingredients": [
       "감자",
       "소금",
@@ -69446,7 +69414,7 @@
     "name": "호박전",
     "category": "일품",
     "method": "부치기",
-    "img": null,
+    "img": "img/호박전.jpg",
     "ingredients": [
       "애호박",
       "밀가루",
@@ -69486,7 +69454,7 @@
     "name": "계란토스트",
     "category": "일품",
     "method": "굽기",
-    "img": null,
+    "img": "img/계란토스트.jpg",
     "ingredients": [
       "식빵",
       "달걀",
@@ -69531,7 +69499,7 @@
     "name": "햄치즈토스트",
     "category": "일품",
     "method": "굽기",
-    "img": null,
+    "img": "img/햄치즈토스트.jpg",
     "ingredients": [
       "식빵",
       "햄",
@@ -69574,7 +69542,7 @@
     "name": "에그마요샌드위치",
     "category": "일품",
     "method": "기타",
-    "img": null,
+    "img": "img/에그마요샌드위치.webp",
     "ingredients": [
       "식빵",
       "달걀",
@@ -69617,7 +69585,7 @@
     "name": "참치샌드위치",
     "category": "일품",
     "method": "기타",
-    "img": null,
+    "img": "img/참치샌드위치.jpg",
     "ingredients": [
       "식빵",
       "참치",
@@ -69661,7 +69629,7 @@
     "name": "볶음우동",
     "category": "일품",
     "method": "볶기",
-    "img": null,
+    "img": "img/볶음우동.jpg",
     "ingredients": [
       "우동면",
       "양배추",
@@ -69711,7 +69679,7 @@
     "name": "어묵우동",
     "category": "일품",
     "method": "끓이기",
-    "img": null,
+    "img": "img/어묵우동.jpg",
     "ingredients": [
       "우동면",
       "어묵",
@@ -69760,7 +69728,7 @@
     "name": "군만두",
     "category": "일품",
     "method": "굽기",
-    "img": null,
+    "img": "img/군만두.jpg",
     "ingredients": [
       "만두",
       "식용유",
@@ -69806,7 +69774,7 @@
     "name": "마늘빵",
     "category": "일품",
     "method": "굽기",
-    "img": null,
+    "img": "img/마늘빵.jpg",
     "ingredients": [
       "식빵",
       "버터",
@@ -69847,7 +69815,7 @@
     "name": "계란말이",
     "category": "반찬",
     "method": "부치기",
-    "img": null,
+    "img": "img/계란말이.jpg",
     "ingredients": [
       "달걀",
       "대파",
@@ -69893,7 +69861,7 @@
     "name": "치즈계란말이",
     "category": "반찬",
     "method": "부치기",
-    "img": null,
+    "img": "img/치즈계란말이.jpg",
     "ingredients": [
       "달걀",
       "슬라이스치즈",
@@ -69939,7 +69907,7 @@
     "name": "계란찜",
     "category": "반찬",
     "method": "찌기",
-    "img": null,
+    "img": "img/계란찜.webp",
     "ingredients": [
       "달걀",
       "물",
@@ -69984,7 +69952,7 @@
     "name": "스크램블에그",
     "category": "반찬",
     "method": "볶기",
-    "img": null,
+    "img": "img/스크램블에그.jpg",
     "ingredients": [
       "달걀",
       "우유",
@@ -70026,7 +69994,7 @@
     "name": "계란장조림",
     "category": "반찬",
     "method": "끓이기",
-    "img": null,
+    "img": "img/계란장조림.jpg",
     "ingredients": [
       "달걀",
       "간장",
@@ -70070,7 +70038,7 @@
     "name": "메추리알장조림",
     "category": "반찬",
     "method": "끓이기",
-    "img": null,
+    "img": "img/메추리알장조림.jpg",
     "ingredients": [
       "메추리알",
       "간장",
@@ -70113,7 +70081,7 @@
     "name": "소시지야채볶음",
     "category": "반찬",
     "method": "볶기",
-    "img": null,
+    "img": "img/소시지야채볶음.jpg",
     "ingredients": [
       "소시지",
       "양파",
@@ -70157,7 +70125,7 @@
     "name": "스팸구이",
     "category": "반찬",
     "method": "굽기",
-    "img": null,
+    "img": "img/스팸구이.jpg",
     "ingredients": [
       "햄",
       "식용유",
@@ -70193,7 +70161,7 @@
     "name": "두부부침",
     "category": "반찬",
     "method": "부치기",
-    "img": null,
+    "img": "img/두부부침.jpg",
     "ingredients": [
       "두부",
       "소금",
@@ -70236,7 +70204,7 @@
     "name": "두부조림",
     "category": "반찬",
     "method": "끓이기",
-    "img": null,
+    "img": "img/두부조림.jpg",
     "ingredients": [
       "두부",
       "양파",
@@ -70287,7 +70255,7 @@
     "name": "두부김치",
     "category": "반찬",
     "method": "볶기",
-    "img": null,
+    "img": "img/두부김치.jpg",
     "ingredients": [
       "두부",
       "김치",
@@ -70335,7 +70303,7 @@
     "name": "콩나물무침",
     "category": "반찬",
     "method": "무치기",
-    "img": null,
+    "img": "img/콩나물무침.jpg",
     "ingredients": [
       "콩나물",
       "대파",
@@ -70375,7 +70343,7 @@
     "name": "시금치나물",
     "category": "반찬",
     "method": "무치기",
-    "img": null,
+    "img": "img/시금치나물.jpg",
     "ingredients": [
       "시금치",
       "국간장",
@@ -70417,7 +70385,7 @@
     "name": "숙주나물무침",
     "category": "반찬",
     "method": "무치기",
-    "img": null,
+    "img": "img/숙주나물무침.jpg",
     "ingredients": [
       "숙주",
       "대파",
@@ -70460,7 +70428,7 @@
     "name": "감자볶음",
     "category": "반찬",
     "method": "볶기",
-    "img": null,
+    "img": "img/감자볶음.jpg",
     "ingredients": [
       "감자",
       "양파",
@@ -70507,7 +70475,7 @@
     "name": "감자조림",
     "category": "반찬",
     "method": "끓이기",
-    "img": null,
+    "img": "img/감자조림.jpg",
     "ingredients": [
       "감자",
       "간장",
@@ -70555,7 +70523,7 @@
     "name": "어묵볶음",
     "category": "반찬",
     "method": "볶기",
-    "img": null,
+    "img": "img/어묵볶음.jpg",
     "ingredients": [
       "어묵",
       "양파",
@@ -70602,7 +70570,7 @@
     "name": "멸치볶음",
     "category": "반찬",
     "method": "볶기",
-    "img": null,
+    "img": "img/멸치볶음.jpg",
     "ingredients": [
       "멸치",
       "식용유",
@@ -70646,7 +70614,7 @@
     "name": "진미채볶음",
     "category": "반찬",
     "method": "볶기",
-    "img": null,
+    "img": "img/진미채볶음.jpg",
     "ingredients": [
       "진미채",
       "고추장",
@@ -70691,7 +70659,7 @@
     "name": "오이무침",
     "category": "반찬",
     "method": "무치기",
-    "img": null,
+    "img": "img/오이무침.jpg",
     "ingredients": [
       "오이",
       "소금",
@@ -70735,7 +70703,7 @@
     "name": "애호박볶음",
     "category": "반찬",
     "method": "볶기",
-    "img": null,
+    "img": "img/애호박볶음.jpg",
     "ingredients": [
       "애호박",
       "양파",
@@ -70778,7 +70746,7 @@
     "name": "양배추쌈",
     "category": "반찬",
     "method": "찌기",
-    "img": null,
+    "img": "img/양배추쌈.jpg",
     "ingredients": [
       "양배추",
       "쌈장",
@@ -70815,7 +70783,7 @@
     "name": "버섯볶음",
     "category": "반찬",
     "method": "볶기",
-    "img": null,
+    "img": "img/버섯볶음.jpg",
     "ingredients": [
       "느타리버섯",
       "양송이버섯",
@@ -70860,7 +70828,7 @@
     "name": "브로콜리초고추장무침",
     "category": "반찬",
     "method": "무치기",
-    "img": null,
+    "img": "img/브로콜리초고추장무침.jpg",
     "ingredients": [
       "브로콜리",
       "고추장",
@@ -70903,7 +70871,7 @@
     "name": "김구이",
     "category": "반찬",
     "method": "굽기",
-    "img": null,
+    "img": "img/김구이.jpg",
     "ingredients": [
       "김",
       "참기름",
@@ -70944,7 +70912,7 @@
     "name": "참치전",
     "category": "반찬",
     "method": "부치기",
-    "img": null,
+    "img": "img/참치전.jpg",
     "ingredients": [
       "참치",
       "달걀",
@@ -70989,7 +70957,7 @@
     "name": "닭가슴살간장볶음",
     "category": "반찬",
     "method": "볶기",
-    "img": null,
+    "img": "img/닭가슴살간장볶음.webp",
     "ingredients": [
       "닭가슴살",
       "양파",
@@ -71038,7 +71006,7 @@
     "name": "제육볶음",
     "category": "반찬",
     "method": "볶기",
-    "img": null,
+    "img": "img/제육볶음.jpg",
     "ingredients": [
       "돼지고기",
       "양파",
@@ -71090,7 +71058,7 @@
     "name": "소불고기",
     "category": "반찬",
     "method": "볶기",
-    "img": null,
+    "img": "img/소불고기.jpg",
     "ingredients": [
       "소고기",
       "양파",
@@ -71144,7 +71112,7 @@
     "name": "닭볶음탕",
     "category": "반찬",
     "method": "끓이기",
-    "img": null,
+    "img": "img/닭볶음탕.jpg",
     "ingredients": [
       "닭고기",
       "감자",
@@ -71200,7 +71168,7 @@
     "name": "돼지고기김치볶음",
     "category": "반찬",
     "method": "볶기",
-    "img": null,
+    "img": "img/돼지고기김치볶음.webp",
     "ingredients": [
       "김치",
       "돼지고기",
@@ -71249,7 +71217,7 @@
     "name": "오징어볶음",
     "category": "반찬",
     "method": "볶기",
-    "img": null,
+    "img": "img/오징어볶음.jpg",
     "ingredients": [
       "오징어",
       "양파",
@@ -71300,7 +71268,7 @@
     "name": "무생채",
     "category": "반찬",
     "method": "무치기",
-    "img": null,
+    "img": "img/무생채.jpg",
     "ingredients": [
       "무",
       "소금",
@@ -71349,7 +71317,7 @@
     "name": "닭갈비",
     "category": "반찬",
     "method": "볶기",
-    "img": null,
+    "img": "img/닭갈비.jpg",
     "ingredients": [
       "닭고기",
       "양배추",
@@ -71404,7 +71372,7 @@
     "name": "토마토달걀볶음",
     "category": "반찬",
     "method": "볶기",
-    "img": null,
+    "img": "img/토마토달걀볶음.jpg",
     "ingredients": [
       "토마토",
       "달걀",
@@ -71451,7 +71419,7 @@
     "name": "양배추달걀전",
     "category": "반찬",
     "method": "부치기",
-    "img": null,
+    "img": "img/양배추달걀전.jpg",
     "ingredients": [
       "양배추",
       "달걀",
@@ -71493,7 +71461,7 @@
     "name": "닭가슴살샐러드",
     "category": "반찬",
     "method": "기타",
-    "img": null,
+    "img": "img/닭가슴살샐러드.jpg",
     "ingredients": [
       "닭가슴살",
       "양상추",
@@ -71538,7 +71506,7 @@
     "name": "단호박샐러드",
     "category": "반찬",
     "method": "찌기",
-    "img": null,
+    "img": "img/단호박샐러드.jpg",
     "ingredients": [
       "단호박",
       "마요네즈",
@@ -71581,7 +71549,7 @@
     "name": "콘치즈",
     "category": "반찬",
     "method": "굽기",
-    "img": null,
+    "img": "img/콘치즈.jpg",
     "ingredients": [
       "옥수수",
       "마요네즈",
@@ -71628,7 +71596,7 @@
     "name": "간장닭봉조림",
     "category": "반찬",
     "method": "끓이기",
-    "img": null,
+    "img": "img/간장닭봉조림.jpg",
     "ingredients": [
       "닭봉",
       "간장",
@@ -71678,7 +71646,7 @@
     "name": "달걀장",
     "category": "반찬",
     "method": "끓이기",
-    "img": null,
+    "img": "img/달걀장.jpg",
     "ingredients": [
       "달걀",
       "간장",
@@ -71723,7 +71691,7 @@
     "name": "양배추샐러드",
     "category": "반찬",
     "method": "기타",
-    "img": null,
+    "img": "img/양배추샐러드.jpg",
     "ingredients": [
       "양배추",
       "당근",
@@ -71763,7 +71731,7 @@
     "name": "프렌치토스트",
     "category": "후식",
     "method": "굽기",
-    "img": null,
+    "img": "img/프렌치토스트.jpg",
     "ingredients": [
       "식빵",
       "달걀",
@@ -71807,7 +71775,7 @@
     "name": "핫케이크",
     "category": "후식",
     "method": "부치기",
-    "img": null,
+    "img": "img/핫케이크.jpg",
     "ingredients": [
       "핫케이크가루",
       "우유",
@@ -71853,7 +71821,7 @@
     "name": "바나나팬케이크",
     "category": "후식",
     "method": "부치기",
-    "img": null,
+    "img": "img/바나나팬케이크.jpg",
     "ingredients": [
       "바나나",
       "달걀",
@@ -71899,7 +71867,7 @@
     "name": "고구마맛탕",
     "category": "후식",
     "method": "볶기",
-    "img": null,
+    "img": "img/고구마맛탕.jpg",
     "ingredients": [
       "고구마",
       "식용유",
@@ -71945,7 +71913,7 @@
     "name": "에어프라이어군고구마",
     "category": "후식",
     "method": "굽기",
-    "img": null,
+    "img": "img/에어프라이어군고구마.jpg",
     "ingredients": [
       "고구마",
       "식용유"
@@ -71984,7 +71952,7 @@
     "name": "요거트볼",
     "category": "후식",
     "method": "기타",
-    "img": null,
+    "img": "img/요거트볼.jpg",
     "ingredients": [
       "요거트",
       "바나나",
@@ -72023,7 +71991,7 @@
     "name": "바나나우유",
     "category": "후식",
     "method": "기타",
-    "img": null,
+    "img": "img/바나나우유.jpg",
     "ingredients": [
       "바나나",
       "우유",
@@ -72059,7 +72027,7 @@
     "name": "딸기우유",
     "category": "후식",
     "method": "기타",
-    "img": null,
+    "img": "img/딸기우유.jpg",
     "ingredients": [
       "딸기",
       "우유",
@@ -72095,7 +72063,7 @@
     "name": "달고나",
     "category": "후식",
     "method": "기타",
-    "img": null,
+    "img": "img/달고나.jpg",
     "ingredients": [
       "설탕",
       "베이킹소다"
@@ -72129,7 +72097,7 @@
     "name": "치즈감자구이",
     "category": "후식",
     "method": "굽기",
-    "img": null,
+    "img": "img/치즈감자구이.jpg",
     "ingredients": [
       "감자",
       "모차렐라치즈",
@@ -72175,7 +72143,7 @@
     "name": "에어프라이어감자튀김",
     "category": "후식",
     "method": "굽기",
-    "img": null,
+    "img": "img/에어프라이어감자튀김.png",
     "ingredients": [
       "감자",
       "식용유",
@@ -72220,7 +72188,7 @@
     "name": "전자레인지계란푸딩",
     "category": "후식",
     "method": "찌기",
-    "img": null,
+    "img": "img/전자레인지계란푸딩.jpg",
     "ingredients": [
       "달걀",
       "우유",
@@ -72260,7 +72228,7 @@
     "name": "팝콘",
     "category": "후식",
     "method": "볶기",
-    "img": null,
+    "img": "img/팝콘.jpg",
     "ingredients": [
       "팝콘옥수수",
       "식용유",
@@ -72300,7 +72268,7 @@
     "name": "에그인헬",
     "category": "일품",
     "method": "끓이기",
-    "img": null,
+    "img": "img/에그인헬.jpg",
     "ingredients": [
       "토마토소스",
       "달걀",
@@ -72354,7 +72322,7 @@
     "name": "감바스",
     "category": "일품",
     "method": "끓이기",
-    "img": null,
+    "img": "img/감바스.webp",
     "ingredients": [
       "새우",
       "마늘",
@@ -72402,7 +72370,7 @@
     "name": "간장볶음라면",
     "category": "일품",
     "method": "볶기",
-    "img": null,
+    "img": "img/간장볶음라면.jpg",
     "ingredients": [
       "라면",
       "양배추",
@@ -72451,7 +72419,7 @@
     "name": "비빔라면",
     "category": "일품",
     "method": "기타",
-    "img": null,
+    "img": "img/비빔라면.webp",
     "ingredients": [
       "라면",
       "고추장",
@@ -72494,7 +72462,7 @@
     "name": "닭죽",
     "category": "밥",
     "method": "끓이기",
-    "img": null,
+    "img": "img/닭죽.jpg",
     "ingredients": [
       "쌀",
       "닭가슴살",
@@ -72543,7 +72511,7 @@
     "name": "소고기야채죽",
     "category": "밥",
     "method": "끓이기",
-    "img": null,
+    "img": "img/소고기야채죽.webp",
     "ingredients": [
       "밥",
       "소고기",
@@ -72592,7 +72560,7 @@
     "name": "만능간장조림장",
     "category": "기타",
     "method": "끓이기",
-    "img": null,
+    "img": "img/만능간장조림장.jpg",
     "ingredients": [
       "간장",
       "물",
@@ -72631,7 +72599,7 @@
     "name": "초고추장",
     "category": "기타",
     "method": "기타",
-    "img": null,
+    "img": "img/초고추장.jpg",
     "ingredients": [
       "고추장",
       "식초",
@@ -72665,7 +72633,7 @@
     "name": "쌈장",
     "category": "기타",
     "method": "기타",
-    "img": null,
+    "img": "img/쌈장.webp",
     "ingredients": [
       "된장",
       "고추장",
@@ -72704,7 +72672,7 @@
     "name": "삼겹살구이",
     "category": "반찬",
     "method": "굽기",
-    "img": null,
+    "img": "img/삼겹살구이.jpg",
     "ingredients": [
       "삼겹살",
       "마늘",
@@ -72751,7 +72719,7 @@
     "name": "콩나물불고기",
     "category": "반찬",
     "method": "볶기",
-    "img": null,
+    "img": "img/콩나물불고기.jpg",
     "ingredients": [
       "돼지고기",
       "콩나물",
@@ -72801,7 +72769,7 @@
     "name": "어묵김치볶음",
     "category": "반찬",
     "method": "볶기",
-    "img": null,
+    "img": "img/어묵김치볶음.webp",
     "ingredients": [
       "어묵",
       "김치",
@@ -72845,7 +72813,7 @@
     "name": "오이냉국",
     "category": "국&찌개",
     "method": "기타",
-    "img": null,
+    "img": "img/오이냉국.jpg",
     "ingredients": [
       "오이",
       "물",
@@ -72890,7 +72858,7 @@
     "name": "토마토달걀국",
     "category": "국&찌개",
     "method": "끓이기",
-    "img": null,
+    "img": "img/토마토달걀국.jpg",
     "ingredients": [
       "토마토",
       "달걀",
@@ -72938,7 +72906,7 @@
     "name": "참치김치전",
     "category": "일품",
     "method": "부치기",
-    "img": null,
+    "img": "img/참치김치전.jpg",
     "ingredients": [
       "김치",
       "참치",
@@ -72984,7 +72952,7 @@
     "name": "부추전",
     "category": "일품",
     "method": "부치기",
-    "img": null,
+    "img": "img/부추전.png",
     "ingredients": [
       "부추",
       "부침가루",
@@ -73031,7 +72999,7 @@
     "name": "숙주돼지고기볶음",
     "category": "반찬",
     "method": "볶기",
-    "img": null,
+    "img": "img/숙주돼지고기볶음.jpg",
     "ingredients": [
       "숙주",
       "돼지고기",
@@ -73075,7 +73043,7 @@
     "name": "고추장찌개",
     "category": "국&찌개",
     "method": "끓이기",
-    "img": null,
+    "img": "img/고추장찌개.jpg",
     "ingredients": [
       "고추장",
       "돼지고기",
@@ -73130,7 +73098,7 @@
     "name": "가래떡구이",
     "category": "후식",
     "method": "굽기",
-    "img": null,
+    "img": "img/가래떡구이.jpg",
     "ingredients": [
       "가래떡",
       "식용유",
@@ -73167,7 +73135,7 @@
     "name": "떡꼬치",
     "category": "후식",
     "method": "굽기",
-    "img": null,
+    "img": "img/떡꼬치.png",
     "ingredients": [
       "떡볶이떡",
       "고추장",
@@ -73210,7 +73178,7 @@
     "name": "감자버터구이",
     "category": "반찬",
     "method": "굽기",
-    "img": null,
+    "img": "img/감자버터구이.jpg",
     "ingredients": [
       "감자",
       "버터",
@@ -73253,7 +73221,7 @@
     "name": "에어프라이어닭다리구이",
     "category": "반찬",
     "method": "굽기",
-    "img": null,
+    "img": "img/에어프라이어닭다리구이.webp",
     "ingredients": [
       "닭다리살",
       "소금",
@@ -73301,7 +73269,7 @@
     "name": "소갈비찜",
     "category": "반찬",
     "method": "끓이기",
-    "img": null,
+    "img": "img/소갈비찜.jpg",
     "ingredients": [
       "소고기",
       "무",
