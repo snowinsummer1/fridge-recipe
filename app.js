@@ -53,9 +53,11 @@ async function load() {
   if (opts.missing) $("optMissing").value = opts.missing;
   if (opts.cat) $("optCat").value = opts.cat;
 
+  if ($("statCount")) $("statCount").textContent = state.recipes.length.toLocaleString("ko-KR");
   renderQuick();
   update();
   renderRec(false);
+  renderPreview();
 }
 
 /* ---------- 메인 화면: 오늘의 추천 ---------- */
@@ -78,12 +80,33 @@ function renderRec(reroll) {
   $("recGrid").replaceChildren(...[...picks].map((i) => card({ r: pool[i], have: [], missing: [], staples: [] }, true)));
 }
 
+// 홈 미리보기 창: 실제 레시피 데이터(사진·이름·추가 재료 수)로 채운다. 실패하면 HTML의 기본 내용이 남는다.
+function renderPreview() {
+  const box = $("pvList");
+  if (!box) return;
+  const mine = new Set(["달걀", "두부"]);
+  const basic = new Set(state.staples.basic);
+  const rows = ["982", "932", "2958"].map((id) => state.recipes.find((r) => r.id === id)).filter((r) => r && r.img);
+  if (rows.length < 3) return;
+  box.replaceChildren(...rows.map((r) => {
+    const miss = r.ingredients.filter((i) => !basic.has(i) && !mine.has(i)).length;
+    return h("div", { class: "pv-row" },
+      h("div", { class: "pv-thumb", "data-e": "🍳" },
+        h("img", { src: r.img, alt: "", loading: "lazy", onerror: (e) => e.target.remove() })),
+      h("div", {}, h("b", {}, r.name), h("small", {}, metaText(r))),
+      h("em", { class: miss ? "" : "ok" }, miss ? `추가 ${miss}개` : "바로 가능"));
+  }));
+}
+
 /* ---------- 화면 전환 (메인 ↔ 요리하러 가기) ---------- */
 function route() {
   const inApp = location.hash === "#cook";
   $("home").hidden = inApp;
   $("app").hidden = !inApp;
-  window.scrollTo(0, 0);
+  document.body.dataset.page = inApp ? "cook" : "home";   // 상단 메뉴의 현재 위치 표시용
+  const anchor = !inApp && location.hash.length > 1 ? document.getElementById(location.hash.slice(1)) : null;
+  if (anchor) anchor.scrollIntoView({ behavior: "smooth" });
+  else window.scrollTo(0, 0);
 }
 
 /* ---------- 매칭 ---------- */
@@ -324,7 +347,12 @@ cameraInput.addEventListener('change', async (e) => {
   const apiKey = sessionStorage.getItem('gemini_api_key') || configKey;
 
   if (!apiKey) {
-    alert('Gemini API 키가 설정되지 않았습니다. 하단에서 키를 입력하고 저장해 주세요.');
+    aiStatus.textContent = '🔑 Gemini API 키가 필요해요. 아래 설정에서 키를 입력하고 저장해 주세요.';
+    const keyBox = document.getElementById('apiKeySection');
+    keyBox.open = true;
+    keyBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    document.getElementById('apiKeyInput').focus({ preventScroll: true });
+    e.target.value = '';
     return;
   }
 
