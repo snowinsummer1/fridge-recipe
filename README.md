@@ -15,3 +15,4 @@
 - Gemini API 키는 사이트 코드에 없습니다. 사이트(`app.js`의 `VISION_URL`)는 사진만 **Cloudflare Worker**로 보내고, Worker가 서버에 보관한 키(`GEMINI_API_KEY`, Secret)로 Gemini를 대신 호출합니다.
 - Worker 코드는 이 저장소의 `worker/fridge-vision.js` 에 있으며, Cloudflare 대시보드의 Worker 코드에 붙여 넣어 배포합니다. 모델은 Worker의 `MODEL` 변수로 바꿉니다.
 - Worker는 `ALLOWED`에 적은 주소(GitHub Pages, localhost:8000)에서 온 요청만 받습니다. 키를 코드·README·커밋에 **절대 적지 마세요.**
+- 남용 방지: 사람(IP)당 1분 5회·하루 30회, 사이트 전체 하루 300회로 제한합니다(한국 시간 0시 초기화). 하루 횟수는 KV 저장소(바인딩 이름 `LIMITS`)에 세고, IP는 해시로만 저장합니다. 한도는 Worker 변수 `PER_MIN`, `PER_IP_DAY`, `GLOBAL_DAY`로 코드 수정 없이 바꿀 수 있습니다.
