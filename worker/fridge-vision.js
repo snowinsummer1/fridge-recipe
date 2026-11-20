@@ -27,11 +27,18 @@ export default {
     if (typeof image !== "string" || image.length > 2_000_000)
       return new Response("image too large", { status: 413, headers: cors });
 
+    // 복사할 때 섞이기 쉬운 앞뒤 공백·줄바꿈은 제거하고, 설정이 빠졌으면 Gemini 오류 대신 원인을 바로 알려 준다
+    const key = (env.GEMINI_API_KEY || "").trim();
+    const model = (env.MODEL || "").trim();
+    if (!key || !model)
+      return new Response(JSON.stringify({ error: { message: `서버 설정이 빠졌어요: ${!key ? "GEMINI_API_KEY " : ""}${!model ? "MODEL" : ""}`.trim() } }),
+        { status: 500, headers: { ...cors, "Content-Type": "application/json" } });
+
     const res = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/${env.MODEL}:generateContent`,
+      `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`,
       {
         method: "POST",
-        headers: { "Content-Type": "application/json", "x-goog-api-key": env.GEMINI_API_KEY },
+        headers: { "Content-Type": "application/json", "x-goog-api-key": key },
         body: JSON.stringify({
           contents: [{ parts: [{ inline_data: { mime_type: "image/jpeg", data: image } }, { text: PROMPT }] }],
           generationConfig: { response_mime_type: "application/json" },
