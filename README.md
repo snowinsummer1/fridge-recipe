@@ -11,5 +11,7 @@
 - 두 방식 모두 추가로 필요한 재료가 적은 순서로 정렬합니다.
 
 ## 냉장고 사진 인식 (선택)
-- 사진을 올리면 Gemini가 재료를 찾아 입력창에 넣어 줍니다. 페이지 하단에 본인의 Gemini API 키를 입력해야 하며, 키는 그 브라우저 탭의 sessionStorage에만 저장됩니다.
-- 로컬 개발 시에는 `config.js`에 `window.CONFIG = { GEMINI_API_KEY: "..." }` 로 둘 수 있습니다. `config.js`는 `.gitignore` 대상이므로 **절대 커밋하지 마세요.** (배포 사이트에서는 이 파일이 없어 404가 나지만 동작에는 영향이 없습니다.)
+- 사진을 올리면 Gemini가 재료를 찾아 입력창에 넣어 줍니다.
+- Gemini API 키는 사이트 코드에 없습니다. 사이트(`app.js`의 `VISION_URL`)는 사진만 **Cloudflare Worker**로 보내고, Worker가 서버에 보관한 키(`GEMINI_API_KEY`, Secret)로 Gemini를 대신 호출합니다.
+- Worker 코드는 이 저장소의 `worker/fridge-vision.js` 에 있으며, Cloudflare 대시보드의 Worker 코드에 붙여 넣어 배포합니다. 모델은 Worker의 `MODEL` 변수로 바꿉니다.
+- Worker는 `ALLOWED`에 적은 주소(GitHub Pages, localhost:8000)에서 온 요청만 받습니다. 키를 코드·README·커밋에 **절대 적지 마세요.**

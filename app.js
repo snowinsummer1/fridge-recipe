@@ -334,27 +334,14 @@ const aiStatus = document.getElementById('ai-status');
 const imagePreview = document.getElementById('image-preview');
 const imagePreviewBox = document.getElementById('image-preview-box');
 
+// Gemini API 키는 Cloudflare Worker(worker/fridge-vision.js)에만 있다. 사이트는 사진만 Worker로 보낸다.
+const VISION_URL = 'https://fridge-vision.hhm8818.workers.dev';
+
 btnTriggerCamera.addEventListener('click', () => cameraInput.click());
 
 cameraInput.addEventListener('change', async (e) => {
   const file = e.target.files[0];
   if (!file) return;
-
-  const rawConfigKey = window.CONFIG?.GEMINI_API_KEY;
-  const configKey = (rawConfigKey && !rawConfigKey.includes('여기에_')) ? rawConfigKey : null;
-
-  // sessionStorage 키 우선 -> 없으면 configKey 사용
-  const apiKey = sessionStorage.getItem('gemini_api_key') || configKey;
-
-  if (!apiKey) {
-    aiStatus.textContent = '🔑 Gemini API 키가 필요해요. 아래 설정에서 키를 입력하고 저장해 주세요.';
-    const keyBox = document.getElementById('apiKeySection');
-    keyBox.open = true;
-    keyBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    document.getElementById('apiKeyInput').focus({ preventScroll: true });
-    e.target.value = '';
-    return;
-  }
 
   try {
     // 1. 이미지 압축 (속도 및 전송량 최적화)
@@ -366,13 +353,14 @@ cameraInput.addEventListener('change', async (e) => {
     aiStatus.textContent = '🔍 냉장고 속 재료를 분석하는 중입니다...';
     btnTriggerCamera.disabled = true;
 
-    // 재료 입력·검색 갱신과 결과 메시지는 callGeminiVisionAPI 안의 autoInputIngredients 가 처리한다
-    await callGeminiVisionAPI(resizedBase64, apiKey);
+    // 재료 입력·검색 갱신과 결과 메시지는 callVisionAPI 안의 autoInputIngredients 가 처리한다
+    await callVisionAPI(resizedBase64);
   } catch (error) {
     console.error('AI 인식 에러:', error);
     aiStatus.textContent = `❌ 인식 실패: ${error.message}`;
   } finally {
     btnTriggerCamera.disabled = false;
+    cameraInput.value = '';   // 같은 사진을 다시 골라도 change 이벤트가 나도록 비운다
   }
 });
 
@@ -415,73 +403,35 @@ function resizeAndCompressImage(file, maxWidth, maxHeight) {
   });
 }
 
-/* Gemini Vision API 호출 (최신 모델 적용 및 자동 폴백) */
-async function callGeminiVisionAPI(base64Image, apiKey) {
-  // 현재 계정에서 사용 가능한 최신 모델 순서로 설정
-  const candidateModels = [
-    'gemini-3.5-flash-lite',
-    'gemini-3.8-flash',
-    'gemini-3.5-flash',
-    'gemini-3.1-flash-lite'
-  ];
-
-  const promptText = `
-  이 냉장고 또는 식재료 사진을 분석하여 식별 가능한 식재료 이름만 추출해줘.
-  반드시 한국어 단어로 이루어진 JSON 배열 형태만 응답해줘.
-  예시: ["계란", "양파", "대파", "두부", "돼지고기"]
-  `;
-
-  let lastError = null;
-
-  for (const model of candidateModels) {
-    try {
-      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
-
-      const payload = {
-        contents: [
-          {
-            parts: [
-              { inline_data: { mime_type: 'image/jpeg', data: base64Image } },
-              { text: promptText }
-            ]
-          }
-        ],
-        generationConfig: {
-          response_mime_type: 'application/json'
-        }
-      };
-
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error?.message || `상태코드 ${response.status}`);
-      }
-
-      const data = await response.json();
-      const parts = data.candidates?.[0]?.content?.parts || [];
-      const textPart = parts.find(p => !p.thought) || parts[parts.length - 1];
-
-      if (!textPart || !textPart.text) {
-        throw new Error('응답 데이터 텍스트 부재');
-      }
-
-      const cleanText = textPart.text.replace(/```json/gi, '').replace(/```/g, '').trim();
-      const detectedNames = JSON.parse(cleanText);
-      autoInputIngredients(detectedNames);
-      return detectedNames;
-
-    } catch (err) {
-      console.warn(`[${model}] 실패, 다음 모델 시도:`, err.message);
-      lastError = err;
-    }
+/* 재료 인식: Worker가 키를 붙여 Gemini를 대신 호출하고, Gemini 응답을 그대로 돌려준다 */
+async function callVisionAPI(base64Image) {
+  let response;
+  try {
+    response = await fetch(VISION_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ image: base64Image })
+    });
+  } catch {
+    throw new Error('인식 서버에 연결하지 못했어요. 잠시 뒤 다시 시도해 주세요.');
   }
 
-  throw lastError || new Error('모든 Gemini 모델 호출에 실패했습니다.');
+  if (!response.ok) {
+    let msg = `상태코드 ${response.status}`;
+    try { msg = (await response.json()).error?.message || msg; } catch { /* Worker 자체 오류는 일반 텍스트 */ }
+    throw new Error(msg);
+  }
+
+  const data = await response.json();
+  const parts = data.candidates?.[0]?.content?.parts || [];
+  const textPart = parts.find(p => !p.thought) || parts[parts.length - 1];
+  if (!textPart || !textPart.text) throw new Error('응답 데이터 텍스트 부재');
+
+  const cleanText = textPart.text.replace(/```json/gi, '').replace(/```/g, '').trim();
+  const detectedNames = JSON.parse(cleanText);
+  if (!Array.isArray(detectedNames)) throw new Error('인식 결과 형식이 올바르지 않아요.');
+  autoInputIngredients(detectedNames);
+  return detectedNames;
 }
 
 function autoInputIngredients(detectedNames) {
@@ -532,26 +482,4 @@ function autoInputIngredients(detectedNames) {
   if (aiStatus) {
     aiStatus.innerText = statusMsg;
   }
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  const savedKey = sessionStorage.getItem('gemini_api_key');
-  if (savedKey) {
-      document.getElementById('apiKeyInput').value = savedKey;
-      updateKeyStatus(true);
-  }
-});
-
-document.getElementById('saveKeyBtn').addEventListener('click', () => {
-  const key = document.getElementById('apiKeyInput').value.trim();
-  if (!key) return alert('API 키를 입력하세요!');
-  sessionStorage.setItem('gemini_api_key', key);
-  updateKeyStatus(true);
-  alert('저장되었습니다.');
-});
-
-function updateKeyStatus(isSet) {
-  const statusSpan = document.getElementById('keyStatus');
-  statusSpan.innerText = isSet ? '🟢 API 키 설정됨' : '🔴 API 키 미설정';
-  statusSpan.style.color = isSet ? 'green' : 'red';
 }
