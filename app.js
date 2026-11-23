@@ -30,6 +30,21 @@ function store(key, val, area = "localStorage") {
   catch { return null; }
 }
 
+/* ---------- 대체 가능한 재료 ---------- */
+// data/substitutes.json 의 한 묶음 안 재료들은 서로 대신 쓸 수 있다. 재료 → {대신 쓸 수 있는 재료들} 로 펼쳐 둔다.
+// 이 파일이 없거나 깨져도 사이트는 대체 표시만 빠진 채 동작한다.
+async function loadSubstitutes() {
+  state.sub = new Map();
+  try {
+    const { groups } = await fetch("data/substitutes.json").then((r) => { if (!r.ok) throw new Error(); return r.json(); });
+    for (const g of groups) for (const a of g) for (const b of g) {
+      if (a === b) continue;
+      if (!state.sub.has(a)) state.sub.set(a, new Set());
+      state.sub.get(a).add(b);
+    }
+  } catch { /* 대체 기능만 꺼진다 */ }
+}
+
 /* ---------- 데이터 로드 ---------- */
 async function load() {
   try {
@@ -42,6 +57,7 @@ async function load() {
     return;
   }
   state.names = new Set(state.ingredients.map((i) => i.name));
+  await loadSubstitutes();
   const cats = [...new Set(state.recipes.map((r) => r.category).filter(Boolean))];
   for (const c of cats) $("optCat").append(h("option", { value: c }, c));
 
@@ -133,19 +149,32 @@ function match() {
     const need = r.ingredients.filter((i) => !assumed.has(i));
     const have = need.filter((i) => mine.has(i));
     if (!all && !have.length) continue;                   // 내 재료를 하나도 안 쓰는 요리는 제외
-    const missing = need.filter((i) => !mine.has(i));
+    let missing = need.filter((i) => !mine.has(i));
+    // 없는 재료 중 '이 요리에 안 쓰이는 내 재료'로 대신할 수 있는 것은 부족한 재료에서 빼고 subs 로 옮긴다
+    // (내 재료 하나는 한 번만 대신하고, 이미 이 요리에 직접 쓰는 재료는 대신하는 데 또 쓰지 않는다)
+    const subs = [];
+    if (missing.length && state.sub.size) {
+      const spare = state.mine.filter((m) => !r.ingredients.includes(m));
+      for (const ing of missing) {
+        const by = spare.find((m) => state.sub.get(ing)?.has(m) && !subs.some((s) => s.by === m));
+        if (by) subs.push({ need: ing, by });
+      }
+      if (subs.length) missing = missing.filter((i) => !subs.some((s) => s.need === i));
+    }
     if (missing.length > maxMissing) continue;
-    out.push({ r, have, missing, staples: r.ingredients.filter((i) => assumed.has(i)) });
+    out.push({ r, have, missing, subs, staples: r.ingredients.filter((i) => assumed.has(i)) });
   }
-  const total = (m) => m.have.length + m.missing.length;
+  const total = (m) => m.have.length + m.missing.length + m.subs.length;
   if (!all && $("optSort").value === "have") {
-    // 내 재료를 많이 쓰는 순 → 부족한 재료가 적은 순 → 필요한 재료가 적은 순
+    // 내 재료를 많이 쓰는 순 → 부족한 재료가 적은 순 → 대체가 적은 순 → 필요한 재료가 적은 순
     out.sort((a, b) =>
-      b.have.length - a.have.length || a.missing.length - b.missing.length || total(a) - total(b));
+      b.have.length - a.have.length || a.missing.length - b.missing.length ||
+      a.subs.length - b.subs.length || total(a) - total(b));
   } else {
-    // 부족한 재료가 적은 순 → 내 재료를 많이 쓰는 순 → 필요한 재료가 적은 순
+    // 부족한 재료가 적은 순 → 내 재료를 많이 쓰는 순 → 대체가 적은 순 → 필요한 재료가 적은 순
     out.sort((a, b) =>
-      a.missing.length - b.missing.length || b.have.length - a.have.length || total(a) - total(b));
+      a.missing.length - b.missing.length || b.have.length - a.have.length ||
+      a.subs.length - b.subs.length || total(a) - total(b));
   }
   return out;
 }
@@ -186,19 +215,25 @@ function metaText(r) {
 }
 
 // plain=true: 재료 매칭과 무관한 카드(오늘의 추천) — '추가 N개' 배지를 달지 않는다
-function card({ r, have, missing, staples }, plain = false) {
+function card({ r, have, missing, subs = [], staples }, plain = false) {
   const badge = plain ? null : missing.length
     ? h("span", { class: "badge" }, `추가 ${missing.length}개`)
     : h("span", { class: "badge zero" }, "바로 가능");
   const img = r.img ? h("img", { src: r.img, alt: "", loading: "lazy", onerror: (e) => e.target.remove() }) : null;
-  return h("button", { class: "card", onclick: () => openDetail(r, { have, missing, staples, plain }) },
+  return h("button", { class: "card", onclick: () => openDetail(r, { have, missing, subs, staples, plain }) },
     h("div", { class: "thumb" }, img || h("div", { class: "ph" }, "사진 준비중"), badge),
     h("div", { class: "cbody" },
       h("h3", {}, r.name),
       h("div", { class: "meta" }, metaText(r)),
       h("div", { class: "tags" },
         missing.map((i) => h("span", { class: "tag miss" }, `+ ${i}`)),
+        subs.map((s) => subTag(s)),
         have.map((i) => h("span", { class: "tag have" }, i)))));
+}
+
+// 보라색: 레시피에 필요하지만 없는 재료를, 내가 입력한 다른 재료로 대신할 수 있는 경우
+function subTag({ need, by }) {
+  return h("span", { class: "tag sub", title: `${need} 대신 ${by}을(를) 쓸 수 있어요` }, `${need} 대신 ${by}`);
 }
 
 function renderChips() {
@@ -237,8 +272,10 @@ function openDetail(r, m) {
       h("div", { class: "tags" },
         m.plain ? r.ingredients.map((i) => h("span", { class: "tag staple" }, i)) : null,
         m.missing.map((i) => h("span", { class: "tag miss" }, `+ ${i}`)),
+        (m.subs || []).map((s) => subTag(s)),
         m.have.map((i) => h("span", { class: "tag have" }, i)),
         m.staples.map((i) => h("span", { class: "tag staple" }, `${i} (기본)`))),
+      m.subs && m.subs.length ? h("p", { class: "subnote" }, "보라색은 내가 가진 다른 재료로 대신할 수 있는 재료예요. 맛과 식감은 조금 달라질 수 있어요.") : null,
       h("h4", {}, "재료"),
       h("div", { class: "ingtext" }, r.partsText),
       h("h4", {}, "만드는 법"),
