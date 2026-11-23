@@ -218,19 +218,30 @@ function metaText(r) {
 
 // plain=true: 재료 매칭과 무관한 카드(오늘의 추천) — '추가 N개' 배지를 달지 않는다
 function card({ r, have, missing, subs = [], staples }, plain = false) {
-  const badge = plain ? null : missing.length
-    ? h("span", { class: "badge" }, `추가 ${missing.length}개`)
-    : h("span", { class: "badge zero" }, "바로 가능");
+  // 라벨 카드: 사진 → 색 띠(종류·조리법 | 시간) → 품명 → 데이터 행 → 재료 → 가격 칸(추가로 살 재료 수)
+  const sticker = !plain && !missing.length ? h("span", { class: "sticker" }, "지금", h("br"), "바로") : null;
   const img = r.img ? h("img", { src: r.img, alt: "", loading: "lazy", onerror: (e) => e.target.remove() }) : null;
-  return h("button", { class: "card", onclick: () => openDetail(r, { have, missing, subs, staples, plain }) },
-    h("div", { class: "thumb" }, img || h("div", { class: "ph" }, "사진 준비중"), badge),
+  const kcal = r.nutrition && r.nutrition.kcal;
+  const total = have.length + subs.length + missing.length;
+  return h("button", { class: `card${plain ? "" : missing.length ? "" : " now"}`, onclick: () => openDetail(r, { have, missing, subs, staples, plain }) },
+    h("div", { class: "thumb" }, img || h("div", { class: "ph" }, "사진 준비중"), sticker),
+    h("div", { class: "band" },
+      h("span", {}, [r.category, r.method].filter(Boolean).join(" · ")),
+      r.minutes ? h("span", {}, `${r.minutesEst ? "약 " : ""}${r.minutes}분`) : null),
     h("div", { class: "cbody" },
       h("h3", {}, r.name),
       h("div", { class: "meta" }, metaText(r)),
+      plain ? null : h("dl", { class: "rows" },
+        h("div", {}, h("dt", {}, "내 재료"), h("dd", {}, `${have.length + subs.length} / ${total}`)),
+        kcal ? h("div", {}, h("dt", {}, "열량"), h("dd", {}, `${kcal}kcal`)) : null),
       h("div", { class: "tags" },
         missing.map((i) => h("span", { class: "tag miss" }, `+ ${i}`)),
         subs.map((s) => subTag(s)),
-        have.map((i) => h("span", { class: "tag have" }, i)))));
+        have.map((i) => h("span", { class: "tag have" }, i))),
+      plain ? null : h("div", { class: "price" },
+        h("span", { class: "bar", "aria-hidden": "true" },
+          have.map(() => h("i", { class: "have" })), subs.map(() => h("i", { class: "sub" })), missing.map(() => h("i", { class: "miss" }))),
+        h("span", { class: "price-num" }, h("small", {}, "추가로 살 재료"), h("b", {}, String(missing.length)), "개"))));
 }
 
 // 보라색: 레시피에 필요하지만 없는 재료를, 내가 입력한 다른 재료로 대신할 수 있는 경우
