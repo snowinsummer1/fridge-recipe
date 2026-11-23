@@ -336,7 +336,7 @@ const imagePreviewBox = document.getElementById('image-preview-box');
 
 // Gemini API 키는 Cloudflare Worker(worker/fridge-vision.js)에만 있다. 사이트는 사진만 Worker로 보낸다.
 const VISION_URL = 'https://fridge-vision.hhm8818.workers.dev';
-const VISION_TIMEOUT_MS = 20000;   // 20초 안에 결과가 없으면 포기하고 다시 올리도록 안내한다
+const VISION_TIMEOUT_MS = 20000;   // 응답이 아예 안 오는 경우를 대비한 안전장치 (실패 안내는 결과가 오는 즉시 뜬다)
 
 // 사진을 바꿔서 다시 올리면 해결될 만한 실패(냉장고·식재료 사진이 아님, 시간 초과 등)는 retry 표시를 달아 안내 문구를 구분한다
 const retryError = (msg) => Object.assign(new Error(`${msg} 재료가 잘 보이는 다른 사진으로 다시 업로드해 주세요.`), { retry: true });
@@ -449,7 +449,7 @@ async function callVisionAPI(base64Image) {
     if (!matched.length) throw retryError('레시피에 쓰는 재료를 찾지 못했어요.');
     return detectedNames;
   } catch (err) {
-    if (err.name === 'AbortError') throw retryError('분석이 20초 넘게 걸려서 멈췄어요.');
+    if (err.name === 'AbortError') throw retryError('분석이 너무 오래 걸려서 멈췄어요.');
     throw err;
   } finally {
     clearTimeout(timer);
