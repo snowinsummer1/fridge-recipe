@@ -336,6 +336,10 @@ const imagePreviewBox = document.getElementById('image-preview-box');
 
 // Gemini API 키는 Cloudflare Worker(worker/fridge-vision.js)에만 있다. 사이트는 사진만 Worker로 보낸다.
 const VISION_URL = 'https://fridge-vision.hhm8818.workers.dev';
+const VISION_TIMEOUT_MS = 20000;   // 20초 안에 결과가 없으면 포기하고 다시 올리도록 안내한다
+
+// 사진을 바꿔서 다시 올리면 해결될 만한 실패(냉장고·식재료 사진이 아님, 시간 초과 등)는 retry 표시를 달아 안내 문구를 구분한다
+const retryError = (msg) => Object.assign(new Error(`${msg} 재료가 잘 보이는 다른 사진으로 다시 업로드해 주세요.`), { retry: true });
 
 btnTriggerCamera.addEventListener('click', () => cameraInput.click());
 
@@ -357,7 +361,7 @@ cameraInput.addEventListener('change', async (e) => {
     await callVisionAPI(resizedBase64);
   } catch (error) {
     console.error('AI 인식 에러:', error);
-    aiStatus.textContent = `❌ 인식 실패: ${error.message}`;
+    aiStatus.textContent = error.retry ? `⚠️ ${error.message}` : `❌ 인식 실패: ${error.message}`;
   } finally {
     btnTriggerCamera.disabled = false;
     cameraInput.value = '';   // 같은 사진을 다시 골라도 change 이벤트가 나도록 비운다
@@ -405,43 +409,63 @@ function resizeAndCompressImage(file, maxWidth, maxHeight) {
 
 /* 재료 인식: Worker가 키를 붙여 Gemini를 대신 호출하고, Gemini 응답을 그대로 돌려준다 */
 async function callVisionAPI(base64Image) {
-  let response;
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), VISION_TIMEOUT_MS);   // 요청과 응답 읽기까지 합쳐 20초
   try {
-    response = await fetch(VISION_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ image: base64Image })
-    });
-  } catch {
-    throw new Error('인식 서버에 연결하지 못했어요. 잠시 뒤 다시 시도해 주세요.');
+    let response;
+    try {
+      response = await fetch(VISION_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ image: base64Image }),
+        signal: ctrl.signal
+      });
+    } catch (err) {
+      if (err.name === 'AbortError') throw err;
+      throw new Error('인식 서버에 연결하지 못했어요. 잠시 뒤 다시 시도해 주세요.');
+    }
+
+    if (!response.ok) {   // 횟수 제한(429) 같은 서버 안내는 그대로 보여 준다
+      let msg = `상태코드 ${response.status}`;
+      try { msg = (await response.json()).error?.message || msg; } catch { /* Worker 자체 오류는 일반 텍스트 */ }
+      throw new Error(msg);
+    }
+
+    const data = await response.json();
+    const parts = data.candidates?.[0]?.content?.parts || [];
+    const textPart = parts.find(p => !p.thought) || parts[parts.length - 1];
+    if (!textPart || !textPart.text) throw retryError('사진에서 재료를 읽지 못했어요.');
+
+    let detectedNames;
+    try {
+      detectedNames = JSON.parse(textPart.text.replace(/```json/gi, '').replace(/```/g, '').trim());
+    } catch {
+      throw retryError('사진에서 재료를 읽지 못했어요.');
+    }
+    if (!Array.isArray(detectedNames)) throw retryError('사진에서 재료를 읽지 못했어요.');
+    if (!detectedNames.length) throw retryError('냉장고나 식재료 사진이 아닌 것 같아요.');
+
+    const { matched } = autoInputIngredients(detectedNames);
+    if (!matched.length) throw retryError('레시피에 쓰는 재료를 찾지 못했어요.');
+    return detectedNames;
+  } catch (err) {
+    if (err.name === 'AbortError') throw retryError('분석이 20초 넘게 걸려서 멈췄어요.');
+    throw err;
+  } finally {
+    clearTimeout(timer);
   }
-
-  if (!response.ok) {
-    let msg = `상태코드 ${response.status}`;
-    try { msg = (await response.json()).error?.message || msg; } catch { /* Worker 자체 오류는 일반 텍스트 */ }
-    throw new Error(msg);
-  }
-
-  const data = await response.json();
-  const parts = data.candidates?.[0]?.content?.parts || [];
-  const textPart = parts.find(p => !p.thought) || parts[parts.length - 1];
-  if (!textPart || !textPart.text) throw new Error('응답 데이터 텍스트 부재');
-
-  const cleanText = textPart.text.replace(/```json/gi, '').replace(/```/g, '').trim();
-  const detectedNames = JSON.parse(cleanText);
-  if (!Array.isArray(detectedNames)) throw new Error('인식 결과 형식이 올바르지 않아요.');
-  autoInputIngredients(detectedNames);
-  return detectedNames;
 }
 
+// 인식된 재료를 입력창에 넣고 { added: 새로 넣은 것, skipped: 레시피 데이터에 없는 것, matched: 레시피 재료와 맞은 것 } 을 돌려준다
 function autoInputIngredients(detectedNames) {
-  if (!Array.isArray(detectedNames) || !detectedNames.length) return;
+  if (!Array.isArray(detectedNames) || !detectedNames.length) return { added: [], skipped: [], matched: [] };
 
   const added = [];
   const skipped = [];
+  const matched = [];
 
   detectedNames.forEach((rawName) => {
-    const name = rawName.trim();
+    const name = String(rawName ?? '').trim();
     if (!name) return;
 
     // 1. 표준 명칭 변환 (aliases.json 활용: 예 '계란' -> '달걀')
@@ -459,6 +483,7 @@ function autoInputIngredients(detectedNames) {
 
     // 3. 레시피 DB(ingredients.json)에 존재하면 추가
     if (state.names.has(canon)) {
+      if (!matched.includes(canon)) matched.push(canon);
       if (!state.mine.includes(canon)) {
         state.mine.push(canon);
         added.push(canon);
@@ -474,7 +499,9 @@ function autoInputIngredients(detectedNames) {
   }
 
   // 5. 결과 상태 표시
-  let statusMsg = `✨ ${added.length}개 재료가 자동으로 입력되었습니다: [ ${added.join(', ')} ]`;
+  let statusMsg = added.length
+    ? `✨ ${added.length}개 재료가 자동으로 입력되었습니다: [ ${added.join(', ')} ]`
+    : `✨ 인식한 재료는 이미 모두 입력되어 있어요: [ ${matched.join(', ')} ]`;
   if (skipped.length > 0) {
     statusMsg += `\n(⚠️ 레시피 데이터에 없는 재료 제외: ${skipped.join(', ')})`;
   }
@@ -482,4 +509,5 @@ function autoInputIngredients(detectedNames) {
   if (aiStatus) {
     aiStatus.innerText = statusMsg;
   }
+  return { added, skipped, matched };
 }
