@@ -164,17 +164,19 @@ function match() {
     if (missing.length > maxMissing) continue;
     out.push({ r, have, missing, subs, staples: r.ingredients.filter((i) => assumed.has(i)) });
   }
+  // 내 재료를 쓰는 수 = 그대로 쓰는 재료 + 보라색(대체)으로 쓰는 재료
+  const used = (m) => m.have.length + m.subs.length;
   const total = (m) => m.have.length + m.missing.length + m.subs.length;
   if (!all && $("optSort").value === "have") {
-    // 내 재료를 많이 쓰는 순 → 부족한 재료가 적은 순 → 대체가 적은 순 → 필요한 재료가 적은 순
+    // 내 재료(보라색 포함)를 많이 쓰는 순 → 부족한 재료가 적은 순 → 그대로 쓰는 재료가 많은 순 → 필요한 재료가 적은 순
     out.sort((a, b) =>
-      b.have.length - a.have.length || a.missing.length - b.missing.length ||
-      a.subs.length - b.subs.length || total(a) - total(b));
+      used(b) - used(a) || a.missing.length - b.missing.length ||
+      b.have.length - a.have.length || total(a) - total(b));
   } else {
-    // 부족한 재료가 적은 순 → 내 재료를 많이 쓰는 순 → 대체가 적은 순 → 필요한 재료가 적은 순
+    // 부족한 재료가 적은 순 → 내 재료(보라색 포함)를 많이 쓰는 순 → 그대로 쓰는 재료가 많은 순 → 필요한 재료가 적은 순
     out.sort((a, b) =>
-      a.missing.length - b.missing.length || b.have.length - a.have.length ||
-      a.subs.length - b.subs.length || total(a) - total(b));
+      a.missing.length - b.missing.length || used(b) - used(a) ||
+      b.have.length - a.have.length || total(a) - total(b));
   }
   return out;
 }
