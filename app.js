@@ -30,6 +30,14 @@ function store(key, val, area = "localStorage") {
   catch { return null; }
 }
 
+// 선 아이콘(SVG). 경로는 코드에 고정된 값만 쓴다.
+function icon(d, size = 14) {
+  const t = document.createElement("template");
+  t.innerHTML = `<svg viewBox="0 0 24 24" width="${size}" height="${size}" aria-hidden="true"><path d="${d}" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>`;
+  return t.content.firstChild;
+}
+const X_PATH = "M6 6l12 12M18 6 6 18";
+
 /* ---------- 대체 가능한 재료 ---------- */
 // data/substitutes.json 의 한 묶음 안 재료들은 서로 대신 쓸 수 있다. 재료 → {대신 쓸 수 있는 재료들} 로 펼쳐 둔다.
 // 이 파일이 없거나 깨져도 사이트는 대체 표시만 빠진 채 동작한다.
@@ -252,7 +260,7 @@ function subTag({ need, by }) {
 function renderChips() {
   $("chips").replaceChildren(...state.mine.map((n) =>
     h("span", { class: "chip" }, n,
-      h("button", { type: "button", "aria-label": `${n} 삭제`, onclick: () => removeIng(n) }, "×"))),
+      h("button", { type: "button", "aria-label": `${n} 삭제`, onclick: () => removeIng(n) }, icon(X_PATH, 12)))),
     state.mine.length
       ? h("button", { type: "button", class: "clearall", onclick: clearIngs }, "전체 삭제")
       : h("span", { class: "nochip" }, "재료 없음"));
@@ -276,7 +284,7 @@ function openDetail(r, m) {
                  ["지방", nut.fat, "g"], ["나트륨", nut.sodium, "mg"]].filter(([, v]) => v !== null && v !== undefined);
   const body = h("article", {},
     h("div", { class: "dhead" },
-      h("button", { class: "close", "aria-label": "닫기", onclick: () => $("dlg").close() }, "✕"),
+      h("button", { class: "close", "aria-label": "닫기", onclick: () => $("dlg").close() }, icon(X_PATH, 18)),
       r.img ? h("img", { src: r.img, alt: r.name }) : null),
     h("div", { class: "dbody" },
       h("h2", {}, r.name),
