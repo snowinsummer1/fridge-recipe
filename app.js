@@ -24,8 +24,9 @@ function h(tag, props, ...kids) {
   return el;
 }
 
-function store(key, val) {
-  try { if (val === undefined) return JSON.parse(localStorage.getItem(key)); localStorage.setItem(key, JSON.stringify(val)); }
+// area: "localStorage"(기본, 설정처럼 오래 남길 것) 또는 "sessionStorage"(탭을 닫으면 사라지는 것)
+function store(key, val, area = "localStorage") {
+  try { if (val === undefined) return JSON.parse(window[area].getItem(key)); window[area].setItem(key, JSON.stringify(val)); }
   catch { return null; }
 }
 
@@ -44,8 +45,10 @@ async function load() {
   const cats = [...new Set(state.recipes.map((r) => r.category).filter(Boolean))];
   for (const c of cats) $("optCat").append(h("option", { value: c }, c));
 
-  const saved = store("mine");
+  // 입력한 재료는 이 탭에서 새로고침할 때만 유지하고, 사이트에 새로 들어오면 비어 있게 시작한다
+  const saved = store("mine", undefined, "sessionStorage");
   if (Array.isArray(saved)) state.mine = saved.filter((n) => state.names.has(n));
+  try { localStorage.removeItem("mine"); } catch { /* 예전 방식으로 남은 재료 기록 정리 */ }
   const opts = store("opts") || {};
   $("optCommon").checked = !!opts.common;
   if (opts.mode) $("optMode").value = opts.mode;
@@ -150,7 +153,7 @@ function match() {
 /* ---------- 렌더링 ---------- */
 function update(resetPage = true) {
   if (resetPage) state.shown = PAGE;
-  store("mine", state.mine);
+  store("mine", state.mine, "sessionStorage");
   store("opts", { common: $("optCommon").checked, mode: $("optMode").value, sort: $("optSort").value, missing: $("optMissing").value, cat: $("optCat").value });
   $("sortOpt").hidden = $("optMode").value !== "any";   // 정렬 선택은 '하나라도 포함'일 때만
   renderChips();
